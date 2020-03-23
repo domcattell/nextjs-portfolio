@@ -1,0 +1,17 @@
+@import './global.scss';
+
+.login {
+    
+
+    &__form {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        background-color: $primaryLightShade;
+        padding: 40px;
+        border-radius: 5px;
+        border: 1px solid rgb(219, 219, 219);
+    }
+}
