@@ -47,9 +47,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _reducers_auth_reducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../reducers/auth.reducer */ "./context/reducers/auth.reducer.js");
-/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../actions/types */ "./context/actions/types.js");
+/* harmony import */ var _helpers_authToken__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../helpers/authToken */ "./helpers/authToken.js");
+/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../actions/types */ "./context/actions/types.js");
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
+
 
 
 
@@ -74,36 +76,41 @@ var AuthProvider = function AuthProvider(props) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
+            if (localStorage.token) {
+              Object(_helpers_authToken__WEBPACK_IMPORTED_MODULE_4__["default"])(localStorage.token);
+            }
+
+            ;
+            _context.prev = 2;
+            _context.next = 5;
             return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios__WEBPACK_IMPORTED_MODULE_2___default.a.get("http://localhost:3000/api/admin/user"));
 
-          case 3:
+          case 5:
             res = _context.sent;
             dispatch({
-              type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["AUTH_SUCCESS"],
+              type: _actions_types__WEBPACK_IMPORTED_MODULE_5__["AUTH_SUCCESS"],
               payload: res.data
             });
-            _context.next = 10;
+            _context.next = 12;
             break;
 
-          case 7:
-            _context.prev = 7;
-            _context.t0 = _context["catch"](0);
+          case 9:
+            _context.prev = 9;
+            _context.t0 = _context["catch"](2);
             dispatch({
-              type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["AUTH_ERROR"],
+              type: _actions_types__WEBPACK_IMPORTED_MODULE_5__["AUTH_ERROR"],
               payload: _context.t0.response.data
             });
 
-          case 10:
+          case 12:
             ;
 
-          case 11:
+          case 13:
           case "end":
             return _context.stop();
         }
       }
-    }, null, null, [[0, 7]], Promise);
+    }, null, null, [[2, 9]], Promise);
   };
 
   var loginUser = function loginUser(user) {
@@ -124,7 +131,7 @@ var AuthProvider = function AuthProvider(props) {
           case 4:
             res = _context2.sent;
             dispatch({
-              type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["LOGIN_SUCCESS"],
+              type: _actions_types__WEBPACK_IMPORTED_MODULE_5__["LOGIN_SUCCESS"],
               payload: res.data
             });
             _context2.next = 11;
@@ -134,7 +141,7 @@ var AuthProvider = function AuthProvider(props) {
             _context2.prev = 8;
             _context2.t0 = _context2["catch"](1);
             dispatch({
-              type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["LOGIN_ERROR"],
+              type: _actions_types__WEBPACK_IMPORTED_MODULE_5__["LOGIN_ERROR"],
               payload: _context2.t0.response.data
             });
 
@@ -151,13 +158,13 @@ var AuthProvider = function AuthProvider(props) {
 
   var logout = function logout() {
     return dispatch({
-      type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["LOGOUT"]
+      type: _actions_types__WEBPACK_IMPORTED_MODULE_5__["LOGOUT"]
     });
   };
 
   var clearMsgs = function clearMsgs() {
     return dispatch({
-      type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["CLEAR_MSGS"]
+      type: _actions_types__WEBPACK_IMPORTED_MODULE_5__["CLEAR_MSGS"]
     });
   };
 
@@ -292,7 +299,7 @@ var reducer = function reducer(state, action) {
     case _actions_types__WEBPACK_IMPORTED_MODULE_1__["AUTH_SUCCESS"]:
       return _objectSpread({}, state, {
         loadingAuth: false,
-        user: action.payloadtoken,
+        user: action.payload,
         isAuthenticated: true
       });
 
@@ -359,6 +366,34 @@ var reducer = function reducer(state, action) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (reducer);
+
+/***/ }),
+
+/***/ "./helpers/authToken.js":
+/*!******************************!*\
+  !*** ./helpers/authToken.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+ //sets header, recieved in the middleware 'checkAuth' serverside to validate 
+//if token is valid or not
+
+var authToken = function authToken(token) {
+  if (token) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common['x-auth-token'] = token;
+  } else {
+    delete axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common['x-auth-token'];
+  }
+
+  ;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (authToken);
 
 /***/ }),
 

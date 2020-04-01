@@ -15,7 +15,7 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 loadingAuth: false,
-                user: action.payloadtoken,
+                user: action.payload,
                 isAuthenticated: true
             }
         

@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken");
 const secret = "secret";
 
-const authCheck = (req, res, next) => {
+const checkAuth = (req, res, next) => {
     const token = req.header('x-auth-token');
 
     if(!token) {
-        res.status(401).json({msg: "No token"});
+        res.status(401).json({msg: "Please login"});
     } else {
         jwt.verify(token, secret, (err, decoded) => {
             if(err) {
@@ -18,4 +18,4 @@ const authCheck = (req, res, next) => {
     };
 };
 
-module.exports = authCheck;
+module.exports = checkAuth;

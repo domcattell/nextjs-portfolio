@@ -11,17 +11,15 @@ router.post('/admin/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
+        if (!username || !password) throw Error('Please enter the fields')
+
         //find user, print json response if not found
         const loginUser = await user.findOne({ username });
-        if (!loginUser) {
-            throw Error('user not found')
-        }
-        // res.json({ msg: 'user not found' });
+        if (!loginUser) throw Error('user not found')
 
         //compare body pass with db password using bcrypt
         const matched = await bcrypt.compare(password, loginUser.password);
-        if (!matched) throw Error ('incorrect credentials')
-        // res.json({ msg: 'incorrect credentials' });
+        if (!matched) throw Error('incorrect credentials')
 
         //assign token and expiration date
         const payload = { username };
@@ -30,26 +28,24 @@ router.post('/admin/login', async (req, res) => {
         });
 
         if (!token) throw Error('token error')
-        // res.json({ msg: 'token error' });
 
         //send token as json to be used for auth in client
         res.status(200).json(token);
-        console.log(token);
     } catch (e) {
-        res.status(400).json({msg: e})
-        console.log(e)
+        res.status(400).json({ msg: e.message })
+        console.log(e.message)
     }
 });
 
 router.get('/admin/user', checkAuth, async (req, res) => {
+    const { username } = req;
     try {
-        const loggedInUser = await user.findById(req.username).select('-password');
-        if (!loggedInUser) res.json({ msg: 'user does not exist' });
-        else {
-            res.status(200).json(loggedInUser);
-        }
+        const loggedInUser = await user.findOne({ username }).select('-password');
+        if (!loggedInUser) throw Error("User not found");
+        res.status(200).json(username);
     } catch (e) {
-        res.status(400).json({ msg: 'error occurred' });
+        res.status(400).json({ msg: "error" });
+        console.log(e)
     }
 });
 

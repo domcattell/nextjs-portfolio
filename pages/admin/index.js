@@ -1,30 +1,44 @@
-import React, { useContext } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import React, { useContext, useEffect } from 'react';
+import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import Router from 'next/router';
 
+import WithAuth from '../../HOC/auth.hoc'
+
 import useInputState from '../../hooks/useInputState';
+import useToggle from '../../hooks/useToggle';
 
 import { AuthActions, AuthContext } from '../../context/contexts/auth.context';
 
 import styles from '../../styles/login.module.scss';
-import axios from 'axios';
 
 const index = (props) => {
 	const [user, handleChange] = useInputState('');
+	const [alert, showAlert] = useToggle(true);
 
 	const { checkAuth, loginUser } = useContext(AuthActions);
 	const { isAuthenticated, authMsgs } = useContext(AuthContext);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		loginUser(user);
+		await loginUser(user);
+		!alert && showAlert();
 	};
-
+	
 	isAuthenticated && Router.push('/admin/dashboard');
+
+	useEffect(() => {
+		checkAuth()
+		console.log("hhfdhdf")
+	}, []);
 
 	return (
 		<div>
 			<Container className={styles.login__form}>
+				{authMsgs && (
+					<Alert show={alert} variant="danger" onClose={showAlert} dismissible>
+						{authMsgs}
+					</Alert>
+				)}
 				<Container>
 					<h4 className="text-center">Login</h4>
 				</Container>

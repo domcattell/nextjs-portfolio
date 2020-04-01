@@ -138,8 +138,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "axios");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _reducers_auth_reducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../reducers/auth.reducer */ "./context/reducers/auth.reducer.js");
-/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../actions/types */ "./context/actions/types.js");
+/* harmony import */ var _helpers_authToken__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../helpers/authToken */ "./helpers/authToken.js");
+/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../actions/types */ "./context/actions/types.js");
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
 
 
 
@@ -159,15 +161,21 @@ const AuthProvider = props => {
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useReducer"])(_reducers_auth_reducer__WEBPACK_IMPORTED_MODULE_2__["default"], init);
 
   const checkAuth = async () => {
+    if (localStorage.token) {
+      Object(_helpers_authToken__WEBPACK_IMPORTED_MODULE_3__["default"])(localStorage.token);
+    }
+
+    ;
+
     try {
       const res = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.get("http://localhost:3000/api/admin/user");
       dispatch({
-        type: _actions_types__WEBPACK_IMPORTED_MODULE_3__["AUTH_SUCCESS"],
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["AUTH_SUCCESS"],
         payload: res.data
       });
     } catch (e) {
       dispatch({
-        type: _actions_types__WEBPACK_IMPORTED_MODULE_3__["AUTH_ERROR"],
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["AUTH_ERROR"],
         payload: e.response.data
       });
     }
@@ -185,12 +193,12 @@ const AuthProvider = props => {
     try {
       const res = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("http://localhost:3000/api/admin/login", user, config);
       dispatch({
-        type: _actions_types__WEBPACK_IMPORTED_MODULE_3__["LOGIN_SUCCESS"],
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["LOGIN_SUCCESS"],
         payload: res.data
       });
     } catch (e) {
       dispatch({
-        type: _actions_types__WEBPACK_IMPORTED_MODULE_3__["LOGIN_ERROR"],
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["LOGIN_ERROR"],
         payload: e.response.data
       });
     }
@@ -199,11 +207,11 @@ const AuthProvider = props => {
   };
 
   const logout = () => dispatch({
-    type: _actions_types__WEBPACK_IMPORTED_MODULE_3__["LOGOUT"]
+    type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["LOGOUT"]
   });
 
   const clearMsgs = () => dispatch({
-    type: _actions_types__WEBPACK_IMPORTED_MODULE_3__["CLEAR_MSGS"]
+    type: _actions_types__WEBPACK_IMPORTED_MODULE_4__["CLEAR_MSGS"]
   });
 
   const actions = {
@@ -313,7 +321,7 @@ const reducer = (state, action) => {
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["AUTH_SUCCESS"]:
       return _objectSpread({}, state, {
         loadingAuth: false,
-        user: action.payloadtoken,
+        user: action.payload,
         isAuthenticated: true
       });
 
@@ -379,6 +387,34 @@ const reducer = (state, action) => {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (reducer);
+
+/***/ }),
+
+/***/ "./helpers/authToken.js":
+/*!******************************!*\
+  !*** ./helpers/authToken.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+ //sets header, recieved in the middleware 'checkAuth' serverside to validate 
+//if token is valid or not
+
+const authToken = token => {
+  if (token) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common['x-auth-token'] = token;
+  } else {
+    delete axios__WEBPACK_IMPORTED_MODULE_0___default.a.defaults.headers.common['x-auth-token'];
+  }
+
+  ;
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (authToken);
 
 /***/ }),
 

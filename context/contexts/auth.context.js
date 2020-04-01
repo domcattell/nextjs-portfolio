@@ -1,6 +1,7 @@
 import React, { createContext, useReducer } from 'react';
 import axios from 'axios';
 import authReducer from '../reducers/auth.reducer';
+import authToken from '../../helpers/authToken';
 import {
     LOGIN_SUCCESS, 
     LOGIN_ERROR, 
@@ -25,6 +26,10 @@ export const AuthProvider = (props) => {
     const [state, dispatch] = useReducer(authReducer, init);
 
     const checkAuth = async () => {
+        if(localStorage.token) {
+            authToken(localStorage.token);
+        };
+
         try {
             const res = await axios.get("http://localhost:3000/api/admin/user");
             dispatch({
