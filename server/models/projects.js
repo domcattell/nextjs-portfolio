@@ -8,6 +8,10 @@ const projectSchema = new mongoose.Schema({
     created: {
         type: Date,
         default: Date.now
+    },
+    projectImg: {
+        type: String,
+        default: "none"
     }
 })
 

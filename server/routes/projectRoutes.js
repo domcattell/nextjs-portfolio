@@ -2,7 +2,32 @@ const
     express = require('express'),
     router = express.Router({ mergeParams: true }),
     projects = require('../models/projects'),
-    checkAuth = require('../middleware/checkAuth');
+    checkAuth = require('../middleware/checkAuth'),
+    multer = require('multer'),
+    imgDir = './public/images/'
+
+//image upload w/ multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, imgDir)
+    },
+    filename: (req, file, cb)  => {
+        cb(null, file.originalname);
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
+    }
+}); 
+
 
 //get all projects
 router.get('/projects', (req, res) => {
@@ -32,14 +57,18 @@ router.get('/projects/:id', (req, res) => {
 ///////////////////////////////
 
 //add new project
-router.post('/projects/new', checkAuth, (req, res) => {
+router.post('/projects/new', checkAuth, upload.single('projectImg'), (req, res) => {
     const { title, description, code, demo } = req.body;
-    //save body to object to send to client
+    const url = req.protocol + '://' + req.get('host')
+    console.log(req.file)
+    console.log(req.body)
+    // save body to object to send to client
     const newProject = {
         title: title,
         description: description,
         code: code,
         demo: demo,
+        projectImg: `${url}/public/images/${req.file.filename}`
     }
 
     //add new project to db

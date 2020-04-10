@@ -18,11 +18,15 @@ const useInputState = (init) => {
         }))
     }
 
+    const handleFileChange = (e) => {
+        setValue({projectImg: e.target.files[0]});
+    }
+
     const reset = () => {
         setValue(init);
     };
     
-    return [newValue, handleChange, handleQuillChange, reset];
+    return [newValue, handleChange, handleQuillChange, reset, handleFileChange];
 }
 
 export default useInputState;

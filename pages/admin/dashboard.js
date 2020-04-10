@@ -8,12 +8,18 @@ import styles from '../../styles/pages/dashboard_page.module.scss';
 import AdminNavbar from '../../components/admin/AdminNavbar';
 import NewProject from '../../components/modals/NewProjects';
 
-import { AuthContext, AuthActions } from '../../context/contexts/auth.context';
+import {ProjectsContext, ProjectsActions} from '../../context/contexts/projects.context';
 import WithAuth from '../../HOC/auth.hoc';
 
 const dashboard = () => {
-	const { user, isAuthenticated } = useContext(AuthContext);
-	const { checkAuth } = useContext(AuthActions);
+	const {getProjects} = useContext(ProjectsActions);
+	const {projects} = useContext(ProjectsContext);
+
+	useEffect(() => {
+		getProjects();
+	},[]);
+
+	console.log(projects);
 
 	return (
 		<div>

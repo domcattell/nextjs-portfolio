@@ -300,7 +300,7 @@ const ProjectsProvider = props => {
       const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/api/projects/new', project);
       dispatch({
         type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["ADD_PROJECT"],
-        payload: res.datas
+        payload: res.data
       });
     } catch (e) {
       dispatch({

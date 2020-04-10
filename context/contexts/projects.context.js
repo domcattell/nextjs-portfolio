@@ -43,7 +43,7 @@ export const ProjectsProvider = (props) => {
 			const res = await axios.post('/api/projects/new', project);
 			dispatch({
 				type: ADD_PROJECT,
-				payload: res.datas
+				payload: res.data
 			});
 		} catch (e) {
 			dispatch({
