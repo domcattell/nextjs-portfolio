@@ -1,0 +1,13 @@
+@import '../global.scss';
+
+.admin_navbar {
+	font-family: 'Noto Sans', sans-serif;
+	padding: 12px 65px;
+
+	&__header {
+		font-size: 22px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+}

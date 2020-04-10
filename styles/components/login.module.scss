@@ -1,0 +1,22 @@
+@import '../global.scss';
+
+.login {
+    &__label {
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 700;
+        color: grey;
+        letter-spacing: 0.5px;
+    }
+
+    &__header {
+        font-family: 'Noto Sans', sans-serif;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: grey;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 38px;
+    }
+}
+
+

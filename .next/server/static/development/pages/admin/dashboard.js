@@ -135,25 +135,215 @@ const WithAuth = AuthComponent => {
 
 /***/ }),
 
+/***/ "./components/admin/AdminNavbar.js":
+/*!*****************************************!*\
+  !*** ./components/admin/AdminNavbar.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../styles/components/admin_navbar.module.scss */ "./styles/components/admin_navbar.module.scss");
+/* harmony import */ var _styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "react-bootstrap");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../context/contexts/auth.context */ "./context/contexts/auth.context.js");
+/* harmony import */ var _hooks_useToggle__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useToggle */ "./hooks/useToggle.js");
+/* harmony import */ var _modals_NewProjects__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../modals/NewProjects */ "./components/modals/NewProjects.js");
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+
+
+
+const AdminNavbar = () => {
+  const {
+    logout
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_3__["AuthActions"]);
+  const [newProject, toggleNewProject] = Object(_hooks_useToggle__WEBPACK_IMPORTED_MODULE_4__["default"])(false);
+  return __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Navbar"], {
+    className: `${_styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.admin_navbar} d-flex justify-content-between border-bottom`
+  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Navbar"].Brand, {
+    className: _styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.admin_navbar__header
+  }, "Dominic Cattell"), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"], null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+    onClick: toggleNewProject
+  }, "New Project"), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, {
+    href: "/"
+  }, "Home"), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Nav"].Link, {
+    href: "#home"
+  }, "Logout")), __jsx(_modals_NewProjects__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    show: newProject,
+    toggle: toggleNewProject
+  }));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (AdminNavbar);
+
+/***/ }),
+
+/***/ "./components/admin/TextEditor.js":
+/*!****************************************!*\
+  !*** ./components/admin/TextEditor.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+ //only load Quill on client side. depends on document, if not present on SSR then will not load
+
+const ReactQuill = false ? undefined : () => false;
+
+const TextEditor = props => {
+  const {
+    0: state,
+    1: setState
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
+  const modules = {
+    toolbar: [[{
+      'header': [1, 2, 3, 4, 5, false]
+    }], ['bold', 'italic', 'underline', 'code-block'], [{
+      'list': 'ordered'
+    }, {
+      'list': 'bullet'
+    }], ['link'], ['clean']]
+  };
+  const formats = ['header', 'bold', 'italic', 'underline', 'code-block', 'list', 'bullet', 'indent', 'link'];
+  return __jsx("div", {
+    className: "text-editor"
+  }, __jsx(ReactQuill, {
+    theme: "snow",
+    modules: modules,
+    formats: formats,
+    value: `${props.value}`,
+    onChange: props.onChange,
+    placeholder: "Enter description..."
+  }));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (TextEditor);
+
+/***/ }),
+
+/***/ "./components/modals/NewProjects.js":
+/*!******************************************!*\
+  !*** ./components/modals/NewProjects.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "react-bootstrap");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _admin_TextEditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../admin/TextEditor */ "./components/admin/TextEditor.js");
+/* harmony import */ var _hooks_useInputState__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../hooks/useInputState */ "./hooks/useInputState.js");
+/* harmony import */ var _context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../context/contexts/projects.context */ "./context/contexts/projects.context.js");
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+
+
+const NewProjects = props => {
+  const [project, handleChange, handleDesc, reset] = Object(_hooks_useInputState__WEBPACK_IMPORTED_MODULE_3__["default"])({
+    description: ''
+  });
+  const {
+    addProject
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_4__["ProjectsActions"]);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    addProject(project);
+  };
+
+  return __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"], {
+    size: "lg",
+    show: props.show,
+    onHide: props.toggle,
+    centered: true
+  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Header, {
+    closeButton: true
+  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, {
+    id: "example-modal-sizes-title-lg"
+  }, "New Project")), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"], {
+    onSubmit: handleSubmit
+  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Control, {
+    name: "title",
+    value: project.title,
+    onChange: handleChange,
+    type: "text",
+    placeholder: "Title"
+  })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Control, {
+    name: "code",
+    value: project.code,
+    onChange: handleChange,
+    type: "text",
+    placeholder: "Source Link"
+  })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Control, {
+    name: "demo",
+    value: project.demo,
+    onChange: handleChange,
+    type: "text",
+    placeholder: "Demo Link"
+  })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(_admin_TextEditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    value: project.description,
+    onChange: handleDesc
+  })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+    variant: "primary",
+    type: "submit"
+  }, "Submit")))));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (NewProjects);
+
+/***/ }),
+
 /***/ "./context/actions/types.js":
 /*!**********************************!*\
   !*** ./context/actions/types.js ***!
   \**********************************/
-/*! exports provided: GET_PROJECTS, GET_PROJECT, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
+/*! exports provided: GET_PROJECTS, GET_PROJECT, ADD_PROJECT, ADD_FAILED, DELETE_PROJECT, DELETE_FAILED, EDIT_PROJECT, EDIT_FAILED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECTS", function() { return GET_PROJECTS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECT", function() { return GET_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_PROJECT", function() { return ADD_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_FAILED", function() { return ADD_FAILED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_PROJECT", function() { return DELETE_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_FAILED", function() { return DELETE_FAILED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_PROJECT", function() { return EDIT_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_FAILED", function() { return EDIT_FAILED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTH_ERROR", function() { return AUTH_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_SUCCESS", function() { return LOGIN_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_ERROR", function() { return LOGIN_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTH_SUCCESS", function() { return AUTH_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_MSGS", function() { return CLEAR_MSGS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGOUT", function() { return LOGOUT; });
+//portfolio projects
 const GET_PROJECTS = "GET_PROJECTS";
 const GET_PROJECT = "GET_PROJECT";
+const ADD_PROJECT = "ADD_PROJECT";
+const ADD_FAILED = "ADD_FAILED";
+const DELETE_PROJECT = "DELETE_PROJECT";
+const DELETE_FAILED = "DELETE_FAILED";
+const EDIT_PROJECT = "EDIT_PROJECT";
+const EDIT_FAILED = "EDIT_FAILED"; //auth
+
 const AUTH_ERROR = "AUTH_ERROR";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_ERROR = "LOGIN_ERROR";
@@ -271,6 +461,86 @@ const AuthProvider = props => {
 
 /***/ }),
 
+/***/ "./context/contexts/projects.context.js":
+/*!**********************************************!*\
+  !*** ./context/contexts/projects.context.js ***!
+  \**********************************************/
+/*! exports provided: ProjectsContext, ProjectsActions, ProjectsProvider */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProjectsContext", function() { return ProjectsContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProjectsActions", function() { return ProjectsActions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProjectsProvider", function() { return ProjectsProvider; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../actions/types */ "./context/actions/types.js");
+/* harmony import */ var _reducers_projects_reducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../reducers/projects.reducer */ "./context/reducers/projects.reducer.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "axios");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
+
+const ProjectsContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])();
+const ProjectsActions = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])();
+const ProjectsProvider = props => {
+  const initState = {
+    projects: null,
+    project: null,
+    projectsMsg: null
+  };
+  const {
+    0: state,
+    1: dispatch
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useReducer"])(_reducers_projects_reducer__WEBPACK_IMPORTED_MODULE_2__["default"], initState);
+
+  const getProjects = async () => {
+    try {
+      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/projects', {
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["GET_PROJECTS"],
+        payload: res.data
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const addProject = async project => {
+    try {
+      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/api/projects/new', project);
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["ADD_PROJECT"],
+        payload: res.datas
+      });
+    } catch (e) {
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["ADD_FAILED"],
+        payload: e.response.data
+      });
+    }
+  };
+
+  const actions = {
+    getProjects,
+    addProject
+  };
+  return __jsx(ProjectsContext.Provider, {
+    value: state
+  }, __jsx(ProjectsActions.Provider, {
+    value: actions
+  }, props.children));
+};
+
+/***/ }),
+
 /***/ "./context/reducers/auth.reducer.js":
 /*!******************************************!*\
   !*** ./context/reducers/auth.reducer.js ***!
@@ -336,6 +606,67 @@ const reducer = (state, action) => {
 
 /***/ }),
 
+/***/ "./context/reducers/projects.reducer.js":
+/*!**********************************************!*\
+  !*** ./context/reducers/projects.reducer.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/types */ "./context/actions/types.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECTS"]:
+      return _objectSpread({}, state, {
+        projects: action.payload
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECT"]:
+      return _objectSpread({}, state, {
+        project: action.payload
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["ADD_PROJECT"]:
+      return _objectSpread({}, state, {
+        projects: [...state.projects, action.payload]
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["DELETE_PROJECT"]:
+      return _objectSpread({}, state, {
+        projects: state.projects.filter(project => project.id != action.payload)
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["EDIT_PROJECT"]:
+      return _objectSpread({}, state, {
+        projects: state.projects.map(project => project.id == action.payload.id ? action.payload : project)
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["EDIT_FAILED"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["DELETE_FAILED"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["ADD_FAILED"]:
+      return _objectSpread({}, state, {
+        projectsMsg: action.payload
+      });
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (reducer);
+
+/***/ }),
+
 /***/ "./helpers/authToken.js":
 /*!******************************!*\
   !*** ./helpers/authToken.js ***!
@@ -364,6 +695,88 @@ const authToken = token => {
 
 /***/ }),
 
+/***/ "./hooks/useInputState.js":
+/*!********************************!*\
+  !*** ./hooks/useInputState.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+const useInputState = init => {
+  const {
+    0: newValue,
+    1: setValue
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(init);
+
+  const handleChange = e => {
+    const {
+      name,
+      value
+    } = e.target;
+    setValue(prev => _objectSpread({}, prev, {
+      [name]: value
+    }));
+  };
+
+  const handleQuillChange = value => {
+    setValue(prev => _objectSpread({}, prev, {
+      description: value
+    }));
+  };
+
+  const reset = () => {
+    setValue(init);
+  };
+
+  return [newValue, handleChange, handleQuillChange, reset];
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (useInputState);
+
+/***/ }),
+
+/***/ "./hooks/useToggle.js":
+/*!****************************!*\
+  !*** ./hooks/useToggle.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const useToggle = init => {
+  const {
+    0: state,
+    1: setState
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(init);
+
+  const toggle = () => {
+    setState(!state);
+  };
+
+  return [state, toggle];
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (useToggle);
+
+/***/ }),
+
 /***/ "./pages/admin/dashboard.js":
 /*!**********************************!*\
   !*** ./pages/admin/dashboard.js ***!
@@ -382,9 +795,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "axios");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _helpers_authToken__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../helpers/authToken */ "./helpers/authToken.js");
-/* harmony import */ var _context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../context/contexts/auth.context */ "./context/contexts/auth.context.js");
-/* harmony import */ var _HOC_auth_hoc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../HOC/auth.hoc */ "./HOC/auth.hoc.js");
+/* harmony import */ var _styles_pages_dashboard_page_module_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../styles/pages/dashboard_page.module.scss */ "./styles/pages/dashboard_page.module.scss");
+/* harmony import */ var _styles_pages_dashboard_page_module_scss__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_styles_pages_dashboard_page_module_scss__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _components_admin_AdminNavbar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/admin/AdminNavbar */ "./components/admin/AdminNavbar.js");
+/* harmony import */ var _components_modals_NewProjects__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/modals/NewProjects */ "./components/modals/NewProjects.js");
+/* harmony import */ var _context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../context/contexts/auth.context */ "./context/contexts/auth.context.js");
+/* harmony import */ var _HOC_auth_hoc__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../HOC/auth.hoc */ "./HOC/auth.hoc.js");
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
 
 
 
@@ -397,14 +817,40 @@ const dashboard = () => {
   const {
     user,
     isAuthenticated
-  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_5__["AuthContext"]);
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_8__["AuthContext"]);
   const {
     checkAuth
-  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_5__["AuthActions"]);
-  return __jsx("div", null, __jsx("h4", null, "Hello from dashboard"));
+  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_8__["AuthActions"]);
+  return __jsx("div", null, __jsx(_components_admin_AdminNavbar__WEBPACK_IMPORTED_MODULE_6__["default"], null));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(_HOC_auth_hoc__WEBPACK_IMPORTED_MODULE_6__["default"])(dashboard));
+/* harmony default export */ __webpack_exports__["default"] = (Object(_HOC_auth_hoc__WEBPACK_IMPORTED_MODULE_9__["default"])(dashboard));
+
+/***/ }),
+
+/***/ "./styles/components/admin_navbar.module.scss":
+/*!****************************************************!*\
+  !*** ./styles/components/admin_navbar.module.scss ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// Exports
+module.exports = {
+	"admin_navbar": "admin_navbar_admin_navbar__2OLbQ",
+	"admin_navbar__header": "admin_navbar_admin_navbar__header__1A0fm"
+};
+
+/***/ }),
+
+/***/ "./styles/pages/dashboard_page.module.scss":
+/*!*************************************************!*\
+  !*** ./styles/pages/dashboard_page.module.scss ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
 
 /***/ }),
 

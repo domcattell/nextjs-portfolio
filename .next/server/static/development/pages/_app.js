@@ -97,21 +97,35 @@ module.exports =
 /*!**********************************!*\
   !*** ./context/actions/types.js ***!
   \**********************************/
-/*! exports provided: GET_PROJECTS, GET_PROJECT, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
+/*! exports provided: GET_PROJECTS, GET_PROJECT, ADD_PROJECT, ADD_FAILED, DELETE_PROJECT, DELETE_FAILED, EDIT_PROJECT, EDIT_FAILED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECTS", function() { return GET_PROJECTS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECT", function() { return GET_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_PROJECT", function() { return ADD_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_FAILED", function() { return ADD_FAILED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_PROJECT", function() { return DELETE_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_FAILED", function() { return DELETE_FAILED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_PROJECT", function() { return EDIT_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_FAILED", function() { return EDIT_FAILED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTH_ERROR", function() { return AUTH_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_SUCCESS", function() { return LOGIN_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_ERROR", function() { return LOGIN_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTH_SUCCESS", function() { return AUTH_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_MSGS", function() { return CLEAR_MSGS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGOUT", function() { return LOGOUT; });
+//portfolio projects
 const GET_PROJECTS = "GET_PROJECTS";
 const GET_PROJECT = "GET_PROJECT";
+const ADD_PROJECT = "ADD_PROJECT";
+const ADD_FAILED = "ADD_FAILED";
+const DELETE_PROJECT = "DELETE_PROJECT";
+const DELETE_FAILED = "DELETE_FAILED";
+const EDIT_PROJECT = "EDIT_PROJECT";
+const EDIT_FAILED = "EDIT_FAILED"; //auth
+
 const AUTH_ERROR = "AUTH_ERROR";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 const LOGIN_ERROR = "LOGIN_ERROR";
@@ -256,7 +270,9 @@ const ProjectsContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext
 const ProjectsActions = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])();
 const ProjectsProvider = props => {
   const initState = {
-    projects: {}
+    projects: null,
+    project: null,
+    projectsMsg: null
   };
   const {
     0: state,
@@ -265,22 +281,38 @@ const ProjectsProvider = props => {
 
   const getProjects = async () => {
     try {
-      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/projects", {
+      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/projects', {
         headers: {
-          Accept: "application/json"
+          Accept: 'application/json'
         }
       });
       dispatch({
         type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["GET_PROJECTS"],
         payload: res.data
       });
-    } catch (err) {
-      console.log(err);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const addProject = async project => {
+    try {
+      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/api/projects/new', project);
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["ADD_PROJECT"],
+        payload: res.datas
+      });
+    } catch (e) {
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["ADD_FAILED"],
+        payload: e.response.data
+      });
     }
   };
 
   const actions = {
-    getProjects
+    getProjects,
+    addProject
   };
   return __jsx(ProjectsContext.Provider, {
     value: state
@@ -381,6 +413,33 @@ const reducer = (state, action) => {
         projects: action.payload
       });
 
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECT"]:
+      return _objectSpread({}, state, {
+        project: action.payload
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["ADD_PROJECT"]:
+      return _objectSpread({}, state, {
+        projects: [...state.projects, action.payload]
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["DELETE_PROJECT"]:
+      return _objectSpread({}, state, {
+        projects: state.projects.filter(project => project.id != action.payload)
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["EDIT_PROJECT"]:
+      return _objectSpread({}, state, {
+        projects: state.projects.map(project => project.id == action.payload.id ? action.payload : project)
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["EDIT_FAILED"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["DELETE_FAILED"]:
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["ADD_FAILED"]:
+      return _objectSpread({}, state, {
+        projectsMsg: action.payload
+      });
+
     default:
       return state;
   }
@@ -418,17 +477,6 @@ const authToken = token => {
 
 /***/ }),
 
-/***/ "./node_modules/bootstrap/dist/css/bootstrap.min.css":
-/*!***********************************************************!*\
-  !*** ./node_modules/bootstrap/dist/css/bootstrap.min.css ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-
 /***/ "./pages/_app.js":
 /*!***********************!*\
   !*** ./pages/_app.js ***!
@@ -442,16 +490,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../context/contexts/projects.context */ "./context/contexts/projects.context.js");
 /* harmony import */ var _context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/contexts/auth.context */ "./context/contexts/auth.context.js");
-/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
-/* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _styles_reset_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles/reset.css */ "./styles/reset.css");
-/* harmony import */ var _styles_reset_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_styles_reset_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _styles_reset_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles/reset.css */ "./styles/reset.css");
+/* harmony import */ var _styles_reset_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_styles_reset_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _styles_custom_theme_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles/_custom_theme.scss */ "./styles/_custom_theme.scss");
+/* harmony import */ var _styles_custom_theme_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_styles_custom_theme_scss__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _styles_quill_editor_custom_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../styles/quill_editor_custom.css */ "./styles/quill_editor_custom.css");
+/* harmony import */ var _styles_quill_editor_custom_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_styles_quill_editor_custom_css__WEBPACK_IMPORTED_MODULE_5__);
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 
 
 
+ // import 'react-quill/dist/quill.snow.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MyApp({
   Component,
@@ -461,6 +513,28 @@ function MyApp({
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (MyApp);
+
+/***/ }),
+
+/***/ "./styles/_custom_theme.scss":
+/*!***********************************!*\
+  !*** ./styles/_custom_theme.scss ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+/***/ "./styles/quill_editor_custom.css":
+/*!****************************************!*\
+  !*** ./styles/quill_editor_custom.css ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+
 
 /***/ }),
 

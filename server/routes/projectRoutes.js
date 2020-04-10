@@ -33,14 +33,13 @@ router.get('/projects/:id', (req, res) => {
 
 //add new project
 router.post('/projects/new', checkAuth, (req, res) => {
-    const { title, description, code, demo, created } = req.body;
+    const { title, description, code, demo } = req.body;
     //save body to object to send to client
     const newProject = {
         title: title,
         description: description,
         code: code,
         demo: demo,
-        created: created
     }
 
     //add new project to db
@@ -48,7 +47,7 @@ router.post('/projects/new', checkAuth, (req, res) => {
         if (err) {
             res.status(403).json({ msg: "Error occurred adding project" });
         } else {
-            res.status(200).json(newProject);
+            res.status(200).json(addedProject);
         };
     });
 });
@@ -56,13 +55,12 @@ router.post('/projects/new', checkAuth, (req, res) => {
 //update project
 router.put('/projects/:id', (req, res) => {
     const { id } = req.params;
-    const { title, description, code, demo, created } = req.body;
+    const { title, description, code, demo } = req.body;
     const updateProject = {
         title: title,
         description: description,
         code: code,
         demo: demo,
-        created: created
     };
 
     projects.findByIdAndUpdate(id, updateProject, (err, updatedDeal) => {

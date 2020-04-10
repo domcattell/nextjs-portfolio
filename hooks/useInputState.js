@@ -11,11 +11,18 @@ const useInputState = (init) => {
         }));
     };
 
+    const handleQuillChange = (value) => {
+        setValue(prev => ({
+            ...prev,
+            description: value
+        }))
+    }
+
     const reset = () => {
         setValue(init);
     };
     
-    return [newValue, handleChange, reset];
+    return [newValue, handleChange, handleQuillChange, reset];
 }
 
 export default useInputState;
