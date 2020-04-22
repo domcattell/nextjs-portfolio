@@ -1,0 +1,27 @@
+@import '../global.scss';
+
+.NavbarBtn {
+    font-size: 30px;
+    border: none;
+    cursor: pointer;
+    background: none;
+    border-radius: 5px;
+    margin: 0px 3px;
+    padding: 3px 25px;
+    transition: background 0.3s ease;
+    outline: none;
+    color: $lightDefault;
+
+    &:hover {
+        background-color: lighten($darkDefault, 12%);
+    }
+
+    &:active {
+        transform: translateY(2px);
+        outline: none;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}

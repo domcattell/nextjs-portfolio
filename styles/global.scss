@@ -1,15 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap');
 
 //light colours
-$lightDefault: rgb(251, 251, 253);
-$lightDarker: #BBBAC6;
-
+$lightDefault: #FDFFFF;
+ 
 //dark colours
-$darkDefault: #03191E;
-$darkLighter:#595959;
+// $darkDefault: #141421;
+// $darkDefault: #1c1c27;
+// $darkDefault: #262635;
+// $darkDefault: #575463;
+$darkDefault: #47465a;
+$darkLight: #696773;
+$grey: #444040;
+
+
+//apply opacity to colourvariable
+@mixin bgOpacity($col, $opacity){
+    background-color: rgba($col, $opacity)
+}
 
 //primary colours
-$primaryDefault: #EE4266;
+// $primaryDefault: #A1869E;//not bad
+$primaryDefault: rgb(252, 131, 129);
 $primaryLight: #F597AB;
 $primaryDark: #822438;
 

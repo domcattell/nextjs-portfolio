@@ -60,7 +60,7 @@ router.get('/projects/:id', (req, res) => {
 router.post('/projects/new', checkAuth, upload.single('projectImg'), (req, res) => {
     const { title, description, code, demo } = req.body;
     const url = req.protocol + '://' + req.get('host')
-    console.log(req.file)
+    // console.log(req.file)
     console.log(req.body)
     // save body to object to send to client
     const newProject = {

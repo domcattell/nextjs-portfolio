@@ -1,21 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { Modal, Form, Button, Container } from 'react-bootstrap';
+import React, { useContext, useEffect } from 'react';
+import { Form, Modal, Button, Container } from 'react-bootstrap';
 import TextEditor from '../admin/TextEditor';
 import useInputState from '../../hooks/useInputState';
 import { ProjectsActions } from '../../context/contexts/projects.context';
 
 const NewProjects = (props) => {
-	const [ project, handleChange, handleDesc, reset, fileChange ] = useInputState({ description: '', projectImg: ''});
+	const [ project, handleChange, handleDesc, reset, fileChange ] = useInputState({ description: '', projectImg: '' });
 	const { addProject } = useContext(ProjectsActions);
-	
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const form_data = new FormData();
+		form_data.append('title', project.title);
+		form_data.append('code', project.code);
+		form_data.append('demo', project.demo);
+		form_data.append('description', project.description);
 		form_data.append('projectImg', project.projectImg);
-		form_data.append('title', project.title)
-		form_data.append('code', project.code)
-		form_data.append('demo', project.demo)
-		form_data.append('description', project.description)
 		addProject(form_data);
 	};
 
@@ -61,14 +61,16 @@ const NewProjects = (props) => {
 							<TextEditor value={project.description} onChange={handleDesc} />
 						</Form.Group>
 
-						<input type="file" onChange={fileChange}/>
+						
+						<input type="file" name="projectImg" onChange={fileChange} />
+						
 
 						<Button variant="primary" type="submit">
 							Submit
 						</Button>
 					</Form>
 				</Container>
-			</Modal.Body> 
+			</Modal.Body>
 		</Modal>
 	);
 };

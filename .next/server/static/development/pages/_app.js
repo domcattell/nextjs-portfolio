@@ -270,7 +270,7 @@ const ProjectsContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext
 const ProjectsActions = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])();
 const ProjectsProvider = props => {
   const initState = {
-    projects: null,
+    projects: [],
     project: null,
     projectsMsg: null
   };
@@ -496,7 +496,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_custom_theme_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_styles_custom_theme_scss__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _styles_quill_editor_custom_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../styles/quill_editor_custom.css */ "./styles/quill_editor_custom.css");
 /* harmony import */ var _styles_quill_editor_custom_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_styles_quill_editor_custom_css__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @fortawesome/fontawesome-svg-core */ "@fortawesome/fontawesome-svg-core");
+/* harmony import */ var _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _fortawesome_free_brands_svg_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @fortawesome/free-brands-svg-icons */ "@fortawesome/free-brands-svg-icons");
+/* harmony import */ var _fortawesome_free_brands_svg_icons__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_brands_svg_icons__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @fortawesome/free-solid-svg-icons */ "@fortawesome/free-solid-svg-icons");
+/* harmony import */ var _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__);
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+
+
 
 
 
@@ -509,6 +518,7 @@ function MyApp({
   Component,
   pageProps
 }) {
+  _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_6__["library"].add(_fortawesome_free_brands_svg_icons__WEBPACK_IMPORTED_MODULE_7__["fab"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faCog"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faSignOutAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faHome"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faNewspaper"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faExternalLinkAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faPenSquare"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faTrash"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faLink"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faAt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faSmile"]);
   return __jsx(_context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_1__["ProjectsProvider"], null, __jsx(_context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_2__["AuthProvider"], null, __jsx(Component, pageProps)));
 }
 
@@ -558,6 +568,39 @@ function MyApp({
 
 module.exports = __webpack_require__(/*! private-next-pages/_app.js */"./pages/_app.js");
 
+
+/***/ }),
+
+/***/ "@fortawesome/fontawesome-svg-core":
+/*!****************************************************!*\
+  !*** external "@fortawesome/fontawesome-svg-core" ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/fontawesome-svg-core");
+
+/***/ }),
+
+/***/ "@fortawesome/free-brands-svg-icons":
+/*!*****************************************************!*\
+  !*** external "@fortawesome/free-brands-svg-icons" ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-brands-svg-icons");
+
+/***/ }),
+
+/***/ "@fortawesome/free-solid-svg-icons":
+/*!****************************************************!*\
+  !*** external "@fortawesome/free-solid-svg-icons" ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("@fortawesome/free-solid-svg-icons");
 
 /***/ }),
 

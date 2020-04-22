@@ -1,0 +1,71 @@
+@import '../global.scss';
+
+.project {
+	border-radius: 5px;
+	overflow: hidden;
+	width: 700px;
+	height: auto;
+	margin-bottom: 30px;
+	position: relative;
+	color: $lightDefault;
+	font-family: 'Roboto', sans-serif;
+	background-color: $lightDefault;
+	border: 1px solid rgb(230, 230, 230);
+
+	button {
+		font-size: 18px;
+		border: none;
+		cursor: pointer;
+		background: none;
+		border-radius: 5px;
+		margin: 0 0px;
+		padding: 3px 20px;
+		transition: background 0.3s ease;
+		outline: none;
+		color: $lightDefault;
+
+		&:hover {
+			background-color: lighten($darkDefault, 12%);
+		}
+
+		&:active {
+			transform: translateY(2px);
+			outline: none;
+		}
+
+		&:focus {
+			outline: none;
+		}
+	}
+
+	&__bg {
+		height: auto;
+		width: inherit;
+		// padding: 20px;
+	}
+
+	&__header {
+		font-size: 16px;
+		font-weight: 700;
+		letter-spacing: 0.5px;
+		display: inline;
+		margin: 0;
+		margin-left: 20px;
+		
+	}
+
+	&__toolbar {
+		@include bgOpacity($darkDefault, 1);
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+		padding: 8px 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		&__controls {
+			float: right;
+		}
+	}
+}

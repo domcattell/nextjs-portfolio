@@ -17,7 +17,7 @@ export const ProjectsActions = createContext();
 
 export const ProjectsProvider = (props) => {
 	const initState = {
-		projects: null,
+		projects: [],
 		project: null,
 		projectsMsg: null
 	};

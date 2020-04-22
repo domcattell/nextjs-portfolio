@@ -1,0 +1,48 @@
+@import '../global.scss';
+
+.pages {
+    float: left;
+    background-color: lighten($darkDefault, 63%);
+    // background-color: darken($darkDefault, 14%);
+    border-right: 1px solid rgb(216, 216, 216);
+    color: $grey;
+
+	&__header {
+		font-size: 32px;
+		font-weight: 700;
+		padding: 25px 25px;
+	}
+
+	&__list {
+		font-weight: 700;
+	}
+
+	&__link {
+		color: inherit;
+		flex-direction: column;
+		justify-content: center;
+		align-items: stretch;
+		display: block;
+		width: 100%;
+        padding: 15px 100px 15px 25px;
+        font-size: 16px;
+        // margin-top: 10px;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+        align-items: center;
+        transition: all 0.3s ease;
+    
+        &:hover {
+            text-decoration: none;
+            color: inherit;
+            background-color: lighten($darkDefault, 55%);
+            box-shadow: inset 6px 0 0 0 $primaryDefault;
+        }
+	}
+
+	&__icon {
+        font-size: 18px;
+        margin-right: 15px;
+	}
+}
