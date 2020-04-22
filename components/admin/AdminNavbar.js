@@ -7,7 +7,7 @@ import { AuthActions } from '../../context/contexts/auth.context';
 
 import useToggle from '../../hooks/useToggle';
 
-import NavbarBtn from '../layout/NavbarBtn';
+import DashboardButton from '../layout/DashboardButton';
 
 const AdminNavbar = () => {
 	const { logout } = useContext(AuthActions);
@@ -19,18 +19,18 @@ const AdminNavbar = () => {
 				<h4 className={styles.navbar__header__title}>Dashboard</h4>
 			</div>
 			<div className={styles.navbar__controls}>
-				<NavbarBtn>
+				<DashboardButton style="large">
 					<FontAwesomeIcon icon="home" />
-				</NavbarBtn>
-				<NavbarBtn onClick={toggleNewProject}>
+				</DashboardButton>
+				<DashboardButton style="large" onClick={toggleNewProject}>
 					<FontAwesomeIcon icon="newspaper" />
-				</NavbarBtn>
-				<NavbarBtn>
+				</DashboardButton>
+				<DashboardButton style="large">
 					<FontAwesomeIcon icon="cog" />
-				</NavbarBtn>
-				<NavbarBtn>
+				</DashboardButton>
+				<DashboardButton style="large">
 					<FontAwesomeIcon icon="sign-out-alt" />
-				</NavbarBtn>
+				</DashboardButton>
 				<NewProject show={newProject} toggle={toggleNewProject} />
 			</div>
 		</nav>

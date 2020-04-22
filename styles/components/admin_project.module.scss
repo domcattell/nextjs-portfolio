@@ -7,41 +7,13 @@
 	height: auto;
 	margin-bottom: 30px;
 	position: relative;
-	color: $lightDefault;
+	color: $clr-text-light;
 	font-family: 'Roboto', sans-serif;
-	background-color: $lightDefault;
-	border: 1px solid rgb(230, 230, 230);
-
-	button {
-		font-size: 18px;
-		border: none;
-		cursor: pointer;
-		background: none;
-		border-radius: 5px;
-		margin: 0 0px;
-		padding: 3px 20px;
-		transition: background 0.3s ease;
-		outline: none;
-		color: $lightDefault;
-
-		&:hover {
-			background-color: lighten($darkDefault, 12%);
-		}
-
-		&:active {
-			transform: translateY(2px);
-			outline: none;
-		}
-
-		&:focus {
-			outline: none;
-		}
-	}
+	border: 1px solid $clr-border;
 
 	&__bg {
 		height: auto;
 		width: inherit;
-		// padding: 20px;
 	}
 
 	&__header {
@@ -55,7 +27,7 @@
 	}
 
 	&__toolbar {
-		@include bgOpacity($darkDefault, 1);
+		background: $gun-powder;
 		width: 100%;
 		position: absolute;
 		bottom: 0;

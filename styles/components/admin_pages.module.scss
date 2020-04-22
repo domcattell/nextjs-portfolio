@@ -2,10 +2,9 @@
 
 .pages {
     float: left;
-    background-color: lighten($darkDefault, 63%);
-    // background-color: darken($darkDefault, 14%);
-    border-right: 1px solid rgb(216, 216, 216);
-    color: $grey;
+    background-color: $grey-30;
+    border-right: 1px solid $clr-border;
+    color: $clr-text-dark;
 
 	&__header {
 		font-size: 32px;
@@ -36,8 +35,8 @@
         &:hover {
             text-decoration: none;
             color: inherit;
-            background-color: lighten($darkDefault, 55%);
-            box-shadow: inset 6px 0 0 0 $primaryDefault;
+            background-color: $clr-link-hover;
+            box-shadow: inset 6px 0 0 0 $geraldine;
         }
 	}
 
