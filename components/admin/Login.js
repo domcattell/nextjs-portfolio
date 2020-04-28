@@ -22,7 +22,7 @@ const Login = () => {
 	};
 
 	return (
-		<Container className={`${styles.login__form} d-flex flex-column`}>
+		<Container className={`${styles.login__form}`}>
 			{authMsgs && (
 				<Row className="justify-content-md-center">
 					<Col lg={5}>

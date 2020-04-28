@@ -59,9 +59,8 @@ router.get('/projects/:id', (req, res) => {
 //add new project
 router.post('/projects/new', checkAuth, upload.single('projectImg'), (req, res) => {
     const { title, description, code, demo } = req.body;
-    const url = req.protocol + '://' + req.get('host')
-    // console.log(req.file)
-    console.log(req.body)
+    const url = `${req.protocol}://${req.get('host')}`;
+    
     // save body to object to send to client
     const newProject = {
         title: title,
@@ -70,6 +69,7 @@ router.post('/projects/new', checkAuth, upload.single('projectImg'), (req, res) 
         demo: demo,
         projectImg: `${url}/public/images/${req.file.filename}`
     }
+    console.log(newProject)
 
     //add new project to db
     projects.create(newProject, (err, addedProject) => {
@@ -82,7 +82,7 @@ router.post('/projects/new', checkAuth, upload.single('projectImg'), (req, res) 
 });
 
 //update project
-router.put('/projects/:id', (req, res) => {
+router.put('/projects/:id', checkAuth, (req, res) => {
     const { id } = req.params;
     const { title, description, code, demo } = req.body;
     const updateProject = {
@@ -102,7 +102,7 @@ router.put('/projects/:id', (req, res) => {
 });
 
 //delete project
-router.delete('/projects/:id', (req, res) => {
+router.delete('/projects/:id', checkAuth, (req, res) => {
     const { id } = req.params;
 
     projects.findByIdAndRemove(id, (err) => {

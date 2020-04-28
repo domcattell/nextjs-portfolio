@@ -1,15 +1,16 @@
 @import '../global.scss';
 
 .project {
-	border-radius: 5px;
 	overflow: hidden;
 	width: 700px;
 	height: auto;
-	margin-bottom: 30px;
+	margin-bottom: 40px;
 	position: relative;
 	color: $clr-text-light;
 	font-family: 'Roboto', sans-serif;
+	border-radius: 3px;
 	border: 1px solid $clr-border;
+
 
 	&__bg {
 		height: auto;
@@ -17,21 +18,21 @@
 	}
 
 	&__header {
-		font-size: 16px;
+		font-size: 14px;
 		font-weight: 700;
 		letter-spacing: 0.5px;
 		display: inline;
 		margin: 0;
-		margin-left: 20px;
+		margin-left: 10px;
 		
 	}
 
 	&__toolbar {
-		background: $gun-powder;
+		background-color: $gun-powder;
 		width: 100%;
 		position: absolute;
 		bottom: 0;
-		padding: 8px 20px;
+		padding: 5px 20px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;

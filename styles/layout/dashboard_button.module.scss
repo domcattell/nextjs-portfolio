@@ -7,12 +7,14 @@
 	}
 
 	&:active {
-		transform: translateY(2px);
+		transform: translateY(0.5px);
 		outline: none;
+		box-shadow: inset 0px 0px 0px 3px $clr-btn-hover;
 	}
 
 	&:focus {
 		outline: none;
+		box-shadow: inset 0px 0px 0px 3px $clr-btn-hover;
 	}
 }
 
@@ -22,9 +24,9 @@
 	cursor: pointer;
 	background: none;
 	border-radius: 5px;
-	margin: 0px 3px;
+	margin: 0;
 	padding: 3px 25px;
-	transition: background 0.3s ease;
+	transition: background 0.35s ease;
 	outline: none;
 	color: $clr-text-light;
     @include interactions;
@@ -40,7 +42,7 @@
 	border: 1px solid $clr-border; //
 	color: $clr-text-dark; //
 	font-weight: 700; //
-	padding: 5px 20px; //
+	padding: 10px 20px; //
 	@include interactions;
 }
 
