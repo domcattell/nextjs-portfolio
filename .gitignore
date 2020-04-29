@@ -1,3 +1,4 @@
 node_modules
 server/server.js
 server/routes/adminRoutes.js
+public/images

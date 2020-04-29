@@ -1,117 +1,108 @@
-const
-    express = require('express'),
-    router = express.Router({ mergeParams: true }),
-    projects = require('../models/projects'),
-    checkAuth = require('../middleware/checkAuth'),
-    multer = require('multer'),
-    imgDir = './public/images/'
-
-//image upload w/ multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, imgDir)
-    },
-    filename: (req, file, cb)  => {
-        cb(null, file.originalname);
-    }
+const express = require('express'),
+	router = express.Router({ mergeParams: true }),
+	projects = require('../models/projects'),
+	checkAuth = require('../middleware/checkAuth'),
+	multer = require('multer'),
+	IMG_DIR = './public/images/';
+	
+//get all projects (api/projects)
+router.get('/', (req, res) => {
+	projects.find({}, (err, projects) => {
+		if (err) {
+			console.log(err);
+		} else {
+			res.status(200).json(projects);
+		}
+	});
 });
 
-const upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-        }
-    }
-}); 
-
-
-//get all projects
-router.get('/projects', (req, res) => {
-    projects.find({}, (err, projects) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.status(200).json(projects);
-        };
-    });
+//get single project (api/projects/${id})
+router.get('/:id', (req, res) => {
+	const { id } = req.params;
+	projects.findById(id, (err, foundProject) => {
+		if (err) {
+			res.status(403).json({ msg: 'something went wrong fetching this project' });
+		} else {
+			res.status(200).json(foundProject);
+		}
+	});
 });
 
-//get single project
-router.get('/projects/:id', (req, res) => {
-    const { id } = req.params;
-    projects.findById(id, (err, foundProject) => {
-        if (err) {
-            res.status(403).json({ msg: "something went wrong fetching this project" });
-        } else {
-            res.status(200).json(foundProject);
-        };
-    });
+/**admin access only routes */
+//add new project (api/projects/new)
+router.post('/new', checkAuth, async (req, res) => {
+	const { title, description, code, demo } = req.body;
+	const url = `${req.protocol}://${req.get('host')}`;
+	try {
+		//manage image upload
+		const image = req.files.projectImg;
+		if (!req.files) throw Error('Please select an image');
+
+		//check if body inputs filled in, if not, throw error
+		if (!title || !description || !code || !demo) throw Error('Please enter all of the fields');
+
+		//check if project already exists, if title name already present, throw an error
+		const titleCheck = title.toLowerCase();
+		const projectExists = await projects.findOne({ title });
+		if (projectExists) throw Error('Project with this name already exists');
+
+		//use body object to create new project
+		const newProject = new projects({
+			title: title,
+			description: description,
+			code: code,
+			demo: demo,
+			projectImg: `${url}/public/images/${req.files.projectImg.name}`
+		});
+
+		image.mv(`${IMG_DIR}${image.name}`, (err) => {
+			if (err) {
+				console.log(err);
+			}
+		});
+		const createProject = await newProject.save();
+
+		//if adding project unsuccessful, throw error
+		if (!createProject) throw Error('Something went wrong saving the project');
+
+		res.status(200).json(createProject);
+	} catch (e) {
+		res.status(400).json({ msg: e.message });
+		console.log(e.message);
+	}
 });
 
-////////////////////////////////
-//**admin access only routes**//
-///////////////////////////////
+//update project (api/projects/${id})
+router.put('/:id', checkAuth, (req, res) => {
+	const { id } = req.params;
+	const { title, description, code, demo } = req.body;
+	const updateProject = {
+		title: title,
+		description: description,
+		code: code,
+		demo: demo
+	};
 
-//add new project
-router.post('/projects/new', checkAuth, upload.single('projectImg'), (req, res) => {
-    const { title, description, code, demo } = req.body;
-    const url = `${req.protocol}://${req.get('host')}`;
-    
-    // save body to object to send to client
-    const newProject = {
-        title: title,
-        description: description,
-        code: code,
-        demo: demo,
-        projectImg: `${url}/public/images/${req.file.filename}`
-    }
-    console.log(newProject)
-
-    //add new project to db
-    projects.create(newProject, (err, addedProject) => {
-        if (err) {
-            res.status(403).json({ msg: "Error occurred adding project" });
-        } else {
-            res.status(200).json(addedProject);
-        };
-    });
+	projects.findByIdAndUpdate(id, updateProject, (err, updatedDeal) => {
+		if (err) {
+			res.status(403).json({ msg: 'Something went wrong updating this project' });
+		} else {
+			res.status(200).json(updatedDeal);
+		}
+	});
 });
 
-//update project
-router.put('/projects/:id', checkAuth, (req, res) => {
-    const { id } = req.params;
-    const { title, description, code, demo } = req.body;
-    const updateProject = {
-        title: title,
-        description: description,
-        code: code,
-        demo: demo,
-    };
+//delete project (api/projects/${id})
+router.delete('/:id', checkAuth, (req, res) => {
+	const { id } = req.params;
 
-    projects.findByIdAndUpdate(id, updateProject, (err, updatedDeal) => {
-        if (err) {
-            res.status(403).json({ msg: "Something went wrong updating this project" });
-        } else {
-            res.status(200).json(updatedDeal);
-        };
-    });
-});
-
-//delete project
-router.delete('/projects/:id', checkAuth, (req, res) => {
-    const { id } = req.params;
-
-    projects.findByIdAndRemove(id, (err) => {
-        if (err) {
-            res.status(403).json({ msg: "Error removing project" });
-        } else {
-            res.status(200);
-        };
-    });
+	projects.findByIdAndRemove(id, (err) => {
+		if (err) {
+			res.status(403).json({ msg: 'Error removing project' });
+		} else {
+			res.status(200);
+		}
+	});
 });
 
 module.exports = router;

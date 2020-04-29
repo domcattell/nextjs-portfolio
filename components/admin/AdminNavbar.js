@@ -28,7 +28,7 @@ const AdminNavbar = () => {
 				<DashboardButton style="large">
 					<FontAwesomeIcon icon="cog" />
 				</DashboardButton>
-				<DashboardButton style="large">
+				<DashboardButton onClick={logout} style="large">
 					<FontAwesomeIcon icon="sign-out-alt" />
 				</DashboardButton>
 				<NewProject show={newProject} toggle={toggleNewProject} />

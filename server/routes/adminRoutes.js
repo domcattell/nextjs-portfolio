@@ -44,8 +44,7 @@ router.get('/admin/user', checkAuth, async (req, res) => {
         if (!loggedInUser) throw Error("User not found");
         res.status(200).json(username);
     } catch (e) {
-        res.status(400).json({ msg: "error" });
-        console.log(e)
+        res.status(400).json({ msg: e.message });
     }
 });
 
