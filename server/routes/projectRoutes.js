@@ -3,8 +3,9 @@ const express = require('express'),
 	projects = require('../models/projects'),
 	checkAuth = require('../middleware/checkAuth'),
 	multer = require('multer'),
-	IMG_DIR = './public/images/';
-	
+	fs = require('fs'),
+	path = require('path');
+
 //get all projects (api/projects)
 router.get('/', (req, res) => {
 	projects.find({}, (err, projects) => {
@@ -28,22 +29,61 @@ router.get('/:id', (req, res) => {
 	});
 });
 
+//helper object for uploading images
+const imgUpload = {
+	validate: (file) => {
+		const format = file.mimetype;
+		if (!file) {
+			throw Error('Please select an image');
+		} else if (format != 'image/png' && format != 'image/jpg' && format != 'image/jpeg') {
+			throw Error('Please upload an image. PNG, JPG, and JPEG allowed');
+		}
+	},
+	savedName: (file) => {
+		console.log('test');
+	},
+	save: (file) => {
+		//directory to save the image
+		let fileName = file.name.replace(path.extname(file.name), '');
+		let fileExt = path.extname(file.name);
+		let newFileName = `${fileName}${fileExt}`;
+
+		const FILE_DIR = './public/images/';
+		let filePath = `${FILE_DIR}${newFileName}`;
+
+		//use mv() function to upload image somewhere on the server
+		if (fs.existsSync(filePath)) {
+			// console.log("image already exists")
+			newFileName = `${fileName}(${+1})${fileExt}`;
+			filePath = `${FILE_DIR}${newFileName}`;
+		}
+
+		file.mv(filePath, (err) => {
+			if (err) {
+				console.log(err);
+				throw Error('Something went wrong uploading the image');
+			}
+		});
+
+		console.log(newFileName);
+		console.log(filePath);
+	}
+};
+
 /**admin access only routes */
 //add new project (api/projects/new)
 router.post('/new', checkAuth, async (req, res) => {
 	const { title, description, code, demo } = req.body;
 	const url = `${req.protocol}://${req.get('host')}`;
 	try {
-		//manage image upload
-		const image = req.files.projectImg;
+		let image = req.files.projectImg;
 		if (!req.files) throw Error('Please select an image');
-
 		//check if body inputs filled in, if not, throw error
 		if (!title || !description || !code || !demo) throw Error('Please enter all of the fields');
 
 		//check if project already exists, if title name already present, throw an error
 		const titleCheck = title.toLowerCase();
-		const projectExists = await projects.findOne({ title });
+		const projectExists = await projects.findOne({ titleCheck });
 		if (projectExists) throw Error('Project with this name already exists');
 
 		//use body object to create new project
@@ -55,11 +95,10 @@ router.post('/new', checkAuth, async (req, res) => {
 			projectImg: `${url}/public/images/${req.files.projectImg.name}`
 		});
 
-		image.mv(`${IMG_DIR}${image.name}`, (err) => {
-			if (err) {
-				console.log(err);
-			}
-		});
+		//validate file is ok to be uploaded, then save to server
+		imgUpload.validate(image);
+		imgUpload.save(image);
+
 		const createProject = await newProject.save();
 
 		//if adding project unsuccessful, throw error

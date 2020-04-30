@@ -12,10 +12,6 @@ const NewProjects = (props) => {
 		e.preventDefault();
 		const form_data = new FormData(newProjectForm);
 		form_data.set('description', project.description);
-		// form_data.set('title', project.title);
-		// form_data.set('code', project.code);
-		// form_data.set('demo', project.demo);
-		// form_data.append('projectImg', project.projectImg);
 		addProject(form_data);
 	};
 

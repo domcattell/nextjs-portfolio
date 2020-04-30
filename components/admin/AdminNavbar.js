@@ -34,7 +34,7 @@ const AdminNavbar = () => {
 				<NewProject show={newProject} toggle={toggleNewProject} />
 			</div>
 		</nav>
-	);
+	);     
 };
 
 export default AdminNavbar;
