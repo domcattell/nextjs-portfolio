@@ -2,9 +2,7 @@ const express = require('express'),
 	router = express.Router({ mergeParams: true }),
 	projects = require('../models/projects'),
 	checkAuth = require('../middleware/checkAuth'),
-	multer = require('multer'),
-	fs = require('fs'),
-	path = require('path');
+	imageUpload = require('../helpers/imageUpload');
 
 //get all projects (api/projects)
 router.get('/', (req, res) => {
@@ -29,54 +27,15 @@ router.get('/:id', (req, res) => {
 	});
 });
 
-//helper object for uploading images
-const imgUpload = {
-	validate: (file) => {
-		const format = file.mimetype;
-		if (!file) {
-			throw Error('Please select an image');
-		} else if (format != 'image/png' && format != 'image/jpg' && format != 'image/jpeg') {
-			throw Error('Please upload an image. PNG, JPG, and JPEG allowed');
-		}
-	},
-	savedName: (file) => {
-		console.log('test');
-	},
-	save: (file) => {
-		//directory to save the image
-		let fileName = file.name.replace(path.extname(file.name), '');
-		let fileExt = path.extname(file.name);
-		let newFileName = `${fileName}${fileExt}`;
-
-		const FILE_DIR = './public/images/';
-		let filePath = `${FILE_DIR}${newFileName}`;
-
-		//use mv() function to upload image somewhere on the server
-		if (fs.existsSync(filePath)) {
-			// console.log("image already exists")
-			newFileName = `${fileName}(${+1})${fileExt}`;
-			filePath = `${FILE_DIR}${newFileName}`;
-		}
-
-		file.mv(filePath, (err) => {
-			if (err) {
-				console.log(err);
-				throw Error('Something went wrong uploading the image');
-			}
-		});
-
-		console.log(newFileName);
-		console.log(filePath);
-	}
-};
-
 /**admin access only routes */
 //add new project (api/projects/new)
 router.post('/new', checkAuth, async (req, res) => {
 	const { title, description, code, demo } = req.body;
 	const url = `${req.protocol}://${req.get('host')}`;
+	//destructure imageUpload helper function to keep code cleaner
+	const {validateFile, fileName, uploadFile} = imageUpload(req.files.projectImg, title);
+
 	try {
-		let image = req.files.projectImg;
 		if (!req.files) throw Error('Please select an image');
 		//check if body inputs filled in, if not, throw error
 		if (!title || !description || !code || !demo) throw Error('Please enter all of the fields');
@@ -92,13 +51,16 @@ router.post('/new', checkAuth, async (req, res) => {
 			description: description,
 			code: code,
 			demo: demo,
-			projectImg: `${url}/public/images/${req.files.projectImg.name}`
+			projectImg: `${url}/public/images/${fileName}`
 		});
 
-		//validate file is ok to be uploaded, then save to server
-		imgUpload.validate(image);
-		imgUpload.save(image);
-
+		/**
+		 * validate that the image is ok to be uploaded
+		 * upload the file
+		 * save the project to the database
+		 */
+		validateFile();
+		uploadFile();
 		const createProject = await newProject.save();
 
 		//if adding project unsuccessful, throw error
