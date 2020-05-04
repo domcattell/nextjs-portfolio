@@ -97,7 +97,7 @@ module.exports =
 /*!**********************************!*\
   !*** ./context/actions/types.js ***!
   \**********************************/
-/*! exports provided: GET_PROJECTS, GET_PROJECT, ADD_PROJECT, ADD_FAILED, DELETE_PROJECT, DELETE_FAILED, EDIT_PROJECT, EDIT_FAILED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
+/*! exports provided: GET_PROJECTS, GET_PROJECT, ADD_PROJECT, ADD_FAILED, DELETE_PROJECT, DELETE_FAILED, EDIT_PROJECT, EDIT_FAILED, CLEAR_MSG, GET_PROJECT_FAILED, GET_PROJECTS_FAILED, CLEAR_PROJECT, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -110,6 +110,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DELETE_FAILED", function() { return DELETE_FAILED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_PROJECT", function() { return EDIT_PROJECT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EDIT_FAILED", function() { return EDIT_FAILED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_MSG", function() { return CLEAR_MSG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECT_FAILED", function() { return GET_PROJECT_FAILED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECTS_FAILED", function() { return GET_PROJECTS_FAILED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_PROJECT", function() { return CLEAR_PROJECT; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTH_ERROR", function() { return AUTH_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_SUCCESS", function() { return LOGIN_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_ERROR", function() { return LOGIN_ERROR; });
@@ -124,7 +128,11 @@ const ADD_FAILED = "ADD_FAILED";
 const DELETE_PROJECT = "DELETE_PROJECT";
 const DELETE_FAILED = "DELETE_FAILED";
 const EDIT_PROJECT = "EDIT_PROJECT";
-const EDIT_FAILED = "EDIT_FAILED"; //auth
+const EDIT_FAILED = "EDIT_FAILED";
+const CLEAR_MSG = "CLEAR_MSG";
+const GET_PROJECT_FAILED = "GET_PROJECT_FAILED";
+const GET_PROJECTS_FAILED = "GET_PROJECTS_FAILED";
+const CLEAR_PROJECT = "CLEAR_PROJECT"; //auth
 
 const AUTH_ERROR = "AUTH_ERROR";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -271,8 +279,8 @@ const ProjectsActions = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext
 const ProjectsProvider = props => {
   const initState = {
     projects: [],
-    project: null,
-    projectsMsg: null
+    project: {},
+    projectsMsg: ''
   };
   const {
     0: state,
@@ -291,7 +299,25 @@ const ProjectsProvider = props => {
         payload: res.data
       });
     } catch (e) {
-      console.log(e);
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["GET_PROJECTS_FAILED"],
+        payload: e.response.data
+      });
+    }
+  };
+
+  const getProject = async projectURL => {
+    try {
+      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.get(`/api/projects/${projectURL}`);
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["GET_PROJECT"],
+        payload: res.data
+      });
+    } catch (e) {
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["GET_PROJECT_FAILED"],
+        payload: e.response.data
+      });
     }
   };
 
@@ -310,9 +336,42 @@ const ProjectsProvider = props => {
     }
   };
 
+  const editProject = async project => {
+    try {
+      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.post(`/api/project/${projectURL}`, project);
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["EDIT_PROJECT"],
+        payload: res.data
+      });
+    } catch (err) {
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["EDIT_FAILED"],
+        payload: err.response.data
+      });
+    }
+
+    ;
+  };
+
+  const clearProjectMsg = () => {
+    dispatch({
+      type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["CLEAR_MSG"]
+    });
+  };
+
+  const clearProject = () => {
+    dispatch({
+      type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["CLEAR_PROJECT"]
+    });
+  };
+
   const actions = {
     getProjects,
-    addProject
+    getProject,
+    addProject,
+    editProject,
+    clearProjectMsg,
+    clearProject
   };
   return __jsx(ProjectsContext.Provider, {
     value: state
@@ -433,6 +492,28 @@ const reducer = (state, action) => {
         projects: state.projects.map(project => project.id == action.payload.id ? action.payload : project)
       });
 
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_MSG"]:
+      return _objectSpread({}, state, {
+        projectsMsg: ""
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_PROJECT"]:
+      return _objectSpread({}, state, {
+        project: {}
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECT_FAILED"]:
+      return _objectSpread({}, state, {
+        project: {},
+        projectsMsg: action.payload
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECTS_FAILED"]:
+      return _objectSpread({}, state, {
+        projects: [],
+        projectsMsg: action.payload
+      });
+
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["EDIT_FAILED"]:
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["DELETE_FAILED"]:
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["ADD_FAILED"]:
@@ -518,7 +599,7 @@ function MyApp({
   Component,
   pageProps
 }) {
-  _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_6__["library"].add(_fortawesome_free_brands_svg_icons__WEBPACK_IMPORTED_MODULE_7__["fab"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faCog"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faSignOutAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faHome"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faNewspaper"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faExternalLinkAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faPenSquare"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faTrash"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faLink"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faAt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faSmile"]);
+  _fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_6__["library"].add(_fortawesome_free_brands_svg_icons__WEBPACK_IMPORTED_MODULE_7__["fab"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faUserPlus"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faCog"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faSignOutAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faHome"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faNewspaper"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faExternalLinkAlt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faPenSquare"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faTrash"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faLink"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faAt"], _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_8__["faSmile"]);
   return __jsx(_context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_1__["ProjectsProvider"], null, __jsx(_context_contexts_auth_context__WEBPACK_IMPORTED_MODULE_2__["AuthProvider"], null, __jsx(Component, pageProps)));
 }
 

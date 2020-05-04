@@ -20,7 +20,7 @@ const path = require('path');
 * uses path returned from dir().path as the path it will be saved to 
 */
 
-const imageUpload = (file, projectName) => {
+module.exports = imageUpload = (file, projectName) => {
 	const validate = () => {
 		const format = file.mimetype;
 		const size = file.size;
@@ -34,7 +34,7 @@ const imageUpload = (file, projectName) => {
 	};
 
 	const dir = () => {
-		const fileName = projectName.replace(/[&\/\\#,+()$~%.'":*?<>/ /{}]/g, '_');
+		const fileName = projectName.replace(/[&\/\\#,+()$~%.'":*?<>/ /{}]/g, '_').toLowerCase();
 		let fileExt = path.extname(file.name);
 		let newFileName = `${fileName}_image${fileExt}`;
 		const FILE_DIR = './public/images/';
@@ -63,4 +63,4 @@ const imageUpload = (file, projectName) => {
 	};
 };
 
-module.exports = imageUpload;
+// module.exports = imageUpload;

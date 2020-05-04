@@ -7,6 +7,10 @@ export const DELETE_PROJECT = "DELETE_PROJECT"
 export const DELETE_FAILED = "DELETE_FAILED"
 export const EDIT_PROJECT = "EDIT_PROJECT"
 export const EDIT_FAILED = "EDIT_FAILED"
+export const CLEAR_MSG = "CLEAR_MSG"
+export const GET_PROJECT_FAILED = "GET_PROJECT_FAILED"
+export const GET_PROJECTS_FAILED = "GET_PROJECTS_FAILED"
+export const CLEAR_PROJECT = "CLEAR_PROJECT"
 
 //auth
 export const AUTH_ERROR = "AUTH_ERROR";

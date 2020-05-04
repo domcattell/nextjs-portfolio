@@ -17,13 +17,14 @@ import {
 	faLink,
 	faAt,
 	faSmile,
+	faUserPlus
 } from '@fortawesome/free-solid-svg-icons';
 // import 'react-quill/dist/quill.snow.css';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MyApp({ Component, pageProps }) {
-	library.add(fab, faCog, faSignOutAlt, faHome, faNewspaper, faExternalLinkAlt, faPenSquare, faTrash, faLink, faAt, faSmile);
+	library.add(fab, faUserPlus, faCog, faSignOutAlt, faHome, faNewspaper, faExternalLinkAlt, faPenSquare, faTrash, faLink, faAt, faSmile);
 
 	return (
 		<ProjectsProvider>

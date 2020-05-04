@@ -23,7 +23,7 @@ const AdminNavbar = () => {
 					<FontAwesomeIcon icon="home" />
 				</DashboardButton>
 				<DashboardButton style="large" onClick={toggleNewProject}>
-					<FontAwesomeIcon icon="newspaper" />
+					<FontAwesomeIcon icon="user-plus" />
 				</DashboardButton>
 				<DashboardButton style="large">
 					<FontAwesomeIcon icon="cog" />
@@ -31,11 +31,10 @@ const AdminNavbar = () => {
 				<DashboardButton onClick={logout} style="large">
 					<FontAwesomeIcon icon="sign-out-alt" />
 				</DashboardButton>
-				<NewProject show={newProject} toggle={toggleNewProject} />
+				{newProject && <NewProject show={newProject} toggle={toggleNewProject} />}
 			</div>
 		</nav>
-	);     
+	);
 };
 
 export default AdminNavbar;
-

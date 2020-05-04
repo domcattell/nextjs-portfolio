@@ -6,7 +6,11 @@ import {
 	DELETE_PROJECT,
 	DELETE_FAILED,
 	EDIT_PROJECT,
-	EDIT_FAILED
+	EDIT_FAILED,
+	CLEAR_MSG,
+	GET_PROJECTS_FAILED,
+	GET_PROJECT_FAILED,
+	CLEAR_PROJECT
 } from '../actions/types';
 
 const reducer = (state, action) => {
@@ -39,6 +43,32 @@ const reducer = (state, action) => {
 			return {
 				...state,
 				projects: state.projects.map((project) => (project.id == action.payload.id ? action.payload : project))
+			};
+
+		case CLEAR_MSG:
+			return {
+				...state,
+				projectsMsg: ""
+			};
+
+		case CLEAR_PROJECT:
+			return {
+				...state,
+				project: {}
+			};
+		
+		case GET_PROJECT_FAILED:
+			return {
+				...state,
+				project: {},
+				projectsMsg: action.payload
+			};
+
+		case GET_PROJECTS_FAILED:
+			return {
+				...state,
+				projects: [],
+				projectsMsg: action.payload
 			};
 
 		case EDIT_FAILED:

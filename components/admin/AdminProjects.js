@@ -22,7 +22,7 @@ const AdminProjects = () => {
 					<DashboardButton style="alternative">+ New Project</DashboardButton>
 				</div>
 				{projects.map((project) => (
-					<AdminProject key={project._id} title={project.title} img={project.projectImg} />
+					<AdminProject key={project._id} title={project.title} img={project.projectImg} url={project.url}/>
 				))}
 			</div>
 		</div>

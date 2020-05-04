@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
-import { Form, Modal, Button, Container } from 'react-bootstrap';
+import { Form, Modal, Button, Container, Alert } from 'react-bootstrap';
 import TextEditor from '../admin/TextEditor';
 import useInputState from '../../hooks/useInputState';
-import { ProjectsActions } from '../../context/contexts/projects.context';
+import { ProjectsActions, ProjectsContext } from '../../context/contexts/projects.context';
+import styles from '../../styles/components/admin_newproject.module.scss';
 
 const NewProjects = (props) => {
 	const [ project, handleChange, handleDesc, resetForm, fileChange ] = useInputState({});
-	const { addProject } = useContext(ProjectsActions);
+	const { addProject, clearProjectMsg } = useContext(ProjectsActions);
+	const { projectsMsg } = useContext(ProjectsContext);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -15,14 +17,20 @@ const NewProjects = (props) => {
 		addProject(form_data);
 	};
 
+	const close = () => {
+		props.toggle();
+		clearProjectMsg();
+	}
+	
 	return (
-		<Modal size="lg" show={props.show} onHide={props.toggle} centered style={{ zIndex: '9999' }}>
+		<Modal size="lg" show={props.show} onHide={close} centered style={{ zIndex: '9999' }}>
 			<Modal.Header closeButton>
 				<Modal.Title id="new-project">New Portfolio Project</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				<Container>
 					<Form id="newProjectForm" onSubmit={handleSubmit}>
+						{projectsMsg && <Alert variant="warning">{projectsMsg.msg}</Alert>}
 						<Form.Group>
 							<Form.Control
 								name="title"
@@ -54,23 +62,20 @@ const NewProjects = (props) => {
 						</Form.Group>
 
 						<Form.Group>
-							<TextEditor 
-								value={project.description || ''} 
-								onChange={handleDesc} 
-							/>
+							<TextEditor value={project.description || ''} onChange={handleDesc} />
 						</Form.Group>
 
 						<Form.Group>
-							<input 
-								type="file" 
-								name="projectImg" 
-								onChange={fileChange} 
-							/>
+							<div className={styles.newproject__submit}>
+								<Button variant="primary" type="submit">
+									Create Project
+								</Button>
+								<div className={styles.newproject__file}>
+									<Button variant="outline-primary">Upload Image</Button>
+									<input type="file" name="projectImg" onChange={fileChange} />
+								</div>
+							</div>
 						</Form.Group>
-
-						<Button variant="primary" type="submit">
-							Submit
-						</Button>
 					</Form>
 				</Container>
 			</Modal.Body>
