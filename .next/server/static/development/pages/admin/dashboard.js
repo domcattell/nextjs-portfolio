@@ -171,10 +171,6 @@ const AdminNavbar = () => {
   return __jsx("nav", {
     className: _styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.navbar
   }, __jsx("div", {
-    className: _styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.navbar__header
-  }, __jsx("h4", {
-    className: _styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.navbar__header__title
-  }, "Dashboard")), __jsx("div", {
     className: _styles_components_admin_navbar_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.navbar__controls
   }, __jsx(_layout_DashboardButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
     style: "large"
@@ -516,36 +512,49 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const EditProject = props => {
-  const [projectDetails, handleChange, handleDesc, resetForm, fileChange] = Object(_hooks_useInputState__WEBPACK_IMPORTED_MODULE_3__["default"])({});
   const {
     editProject,
     getProject,
     clearProjectMsg,
-    clearProject
+    clearProject,
+    loadingProject
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_4__["ProjectsActions"]);
   const {
     projectsMsg,
-    project
+    project,
+    loading
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_4__["ProjectsContext"]);
+  const [projectDetails, handleChange, handleDesc, resetForm, fileChange, currentData] = Object(_hooks_useInputState__WEBPACK_IMPORTED_MODULE_3__["default"])('');
+  /**
+   * two @useEffect hooks here. 
+   * the first is to fetch the initial data, only on mount, and then do cleanup on close
+   * second hook is to prefill the @useInputState hook with the fetched data. this re renders
+   * when the @project state changes, and fills in the form with data
+   */
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    loadingProject();
+    getProject(props.url);
+    return () => {
+      clearProject();
+      clearProjectMsg();
+    };
+  }, [props.url]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    currentData(project);
+  }, [project]);
 
   const handleSubmit = e => {
     e.preventDefault();
+    const form_data = new FormData(EditProjectForm);
+    form_data.set('description', project.description);
+    editProject(props.url, projectDetails);
   };
 
-  const close = () => {
-    props.toggle();
-    clearProjectMsg();
-    clearProject();
-  };
-
-  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
-    getProject(props.url);
-  }, []);
-  console.log(project.title);
   return __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"], {
     size: "lg",
     show: props.show,
-    onHide: close,
+    onHide: props.toggle,
     centered: true,
     style: {
       zIndex: '9999'
@@ -555,7 +564,7 @@ const EditProject = props => {
   }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, {
     id: "new-project"
   }, "Edit ", props.title)), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"], {
-    id: "newProjectForm",
+    id: "EditProjectForm",
     onSubmit: handleSubmit
   }, projectsMsg && __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Alert"], {
     variant: "warning"
@@ -563,37 +572,38 @@ const EditProject = props => {
     name: "title",
     value: projectDetails.title || '',
     onChange: handleChange,
-    type: "text",
-    placeholder: "title"
+    type: "text" // placeholder=""
+
   })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Control, {
     name: "code",
     value: projectDetails.code || '',
     onChange: handleChange,
     type: "text",
-    placeholder: "Source Link"
+    placeholder: ""
   })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Control, {
     name: "demo",
     value: projectDetails.demo || '',
     onChange: handleChange,
     type: "text",
-    placeholder: "Demo Link"
+    placeholder: ""
   })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(_admin_TextEditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
     value: projectDetails.description || '',
     onChange: handleDesc
   })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx("div", {
     className: _styles_components_admin_newproject_module_scss__WEBPACK_IMPORTED_MODULE_5___default.a.newproject__submit
-  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+  }, __jsx("div", null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
     variant: "primary",
     type: "submit"
-  }, "Create Project"), __jsx("div", {
-    className: _styles_components_admin_newproject_module_scss__WEBPACK_IMPORTED_MODULE_5___default.a.newproject__file
-  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-    variant: "outline-primary"
-  }, "Upload Image"), __jsx("input", {
-    type: "file",
+  }, "Update Project")), __jsx("div", null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].File, {
+    id: "formcheck-api-custom",
+    custom: true
+  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].File.Input, {
+    accept: ".jpg,.jpeg,.png",
     name: "projectImg",
     onChange: fileChange
-  }))))))));
+  }), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].File.Label, {
+    "data-browse": "Upload Image"
+  }, project.projectImg ? 'Image Added' : 'Add an Image')))))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (EditProject);
@@ -688,18 +698,19 @@ const NewProjects = props => {
     onChange: handleDesc
   })), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx("div", {
     className: _styles_components_admin_newproject_module_scss__WEBPACK_IMPORTED_MODULE_5___default.a.newproject__submit
-  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+  }, __jsx("div", null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
     variant: "primary",
     type: "submit"
-  }, "Create Project"), __jsx("div", {
-    className: _styles_components_admin_newproject_module_scss__WEBPACK_IMPORTED_MODULE_5___default.a.newproject__file
-  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-    variant: "outline-primary"
-  }, "Upload Image"), __jsx("input", {
-    type: "file",
+  }, "Create Project")), __jsx("div", null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].File, {
+    id: "formcheck-api-custom",
+    custom: true
+  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].File.Input, {
+    accept: ".jpg,.jpeg,.png",
     name: "projectImg",
     onChange: fileChange
-  }))))))));
+  }), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].File.Label, {
+    "data-browse": "Upload Image"
+  }, project.projectImg ? 'Image Added' : 'Add an Image')))))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (NewProjects);
@@ -710,7 +721,7 @@ const NewProjects = props => {
 /*!**********************************!*\
   !*** ./context/actions/types.js ***!
   \**********************************/
-/*! exports provided: GET_PROJECTS, GET_PROJECT, ADD_PROJECT, ADD_FAILED, DELETE_PROJECT, DELETE_FAILED, EDIT_PROJECT, EDIT_FAILED, CLEAR_MSG, GET_PROJECT_FAILED, GET_PROJECTS_FAILED, CLEAR_PROJECT, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
+/*! exports provided: GET_PROJECTS, GET_PROJECT, ADD_PROJECT, ADD_FAILED, DELETE_PROJECT, DELETE_FAILED, EDIT_PROJECT, EDIT_FAILED, CLEAR_MSG, GET_PROJECT_FAILED, GET_PROJECTS_FAILED, CLEAR_PROJECT, PROJECT_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -727,6 +738,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECT_FAILED", function() { return GET_PROJECT_FAILED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECTS_FAILED", function() { return GET_PROJECTS_FAILED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_PROJECT", function() { return CLEAR_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PROJECT_LOADING", function() { return PROJECT_LOADING; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTH_ERROR", function() { return AUTH_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_SUCCESS", function() { return LOGIN_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_ERROR", function() { return LOGIN_ERROR; });
@@ -745,7 +757,8 @@ const EDIT_FAILED = "EDIT_FAILED";
 const CLEAR_MSG = "CLEAR_MSG";
 const GET_PROJECT_FAILED = "GET_PROJECT_FAILED";
 const GET_PROJECTS_FAILED = "GET_PROJECTS_FAILED";
-const CLEAR_PROJECT = "CLEAR_PROJECT"; //auth
+const CLEAR_PROJECT = "CLEAR_PROJECT";
+const PROJECT_LOADING = "PROJECT_LOADING"; //auth
 
 const AUTH_ERROR = "AUTH_ERROR";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -893,7 +906,8 @@ const ProjectsProvider = props => {
   const initState = {
     projects: [],
     project: {},
-    projectsMsg: ''
+    projectsMsg: '',
+    loading: true
   };
   const {
     0: state,
@@ -949,9 +963,9 @@ const ProjectsProvider = props => {
     }
   };
 
-  const editProject = async project => {
+  const editProject = async (projectURL, project) => {
     try {
-      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.post(`/api/project/${projectURL}`, project);
+      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(`/api/projects/${projectURL}`, project);
       dispatch({
         type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["EDIT_PROJECT"],
         payload: res.data
@@ -978,13 +992,18 @@ const ProjectsProvider = props => {
     });
   };
 
+  const loadingProject = () => dispatch({
+    type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["PROJECT_LOADING"]
+  });
+
   const actions = {
     getProjects,
     getProject,
     addProject,
     editProject,
     clearProjectMsg,
-    clearProject
+    clearProject,
+    loadingProject
   };
   return __jsx(ProjectsContext.Provider, {
     value: state
@@ -1087,7 +1106,13 @@ const reducer = (state, action) => {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECT"]:
       return _objectSpread({}, state, {
-        project: action.payload
+        project: action.payload,
+        loading: false
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PROJECT_LOADING"]:
+      return _objectSpread({}, state, {
+        loading: true
       });
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["ADD_PROJECT"]:
@@ -1112,7 +1137,8 @@ const reducer = (state, action) => {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_PROJECT"]:
       return _objectSpread({}, state, {
-        project: {}
+        project: {},
+        loading: true
       });
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECT_FAILED"]:
@@ -1219,11 +1245,15 @@ const useInputState = init => {
     }));
   };
 
-  const reset = () => {
+  const reset = init => {
     setValue(init);
   };
 
-  return [newValue, handleChange, handleQuillChange, reset, handleFileChange];
+  const currentData = init => {
+    setValue(init);
+  };
+
+  return [newValue, handleChange, handleQuillChange, reset, handleFileChange, currentData];
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (useInputState);
@@ -1318,7 +1348,6 @@ module.exports = {
 
 // Exports
 module.exports = {
-	"newproject__file": "admin_newproject_newproject__file__1GKf8",
 	"newproject__submit": "admin_newproject_newproject__submit__3G8mO"
 };
 

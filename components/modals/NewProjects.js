@@ -20,8 +20,8 @@ const NewProjects = (props) => {
 	const close = () => {
 		props.toggle();
 		clearProjectMsg();
-	}
-	
+	};
+
 	return (
 		<Modal size="lg" show={props.show} onHide={close} centered style={{ zIndex: '9999' }}>
 			<Modal.Header closeButton>
@@ -67,12 +67,18 @@ const NewProjects = (props) => {
 
 						<Form.Group>
 							<div className={styles.newproject__submit}>
-								<Button variant="primary" type="submit">
-									Create Project
-								</Button>
-								<div className={styles.newproject__file}>
-									<Button variant="outline-primary">Upload Image</Button>
-									<input type="file" name="projectImg" onChange={fileChange} />
+								<div>
+									<Button variant="primary" type="submit">
+										Create Project
+									</Button>
+								</div>
+								<div>
+									<Form.File id="formcheck-api-custom" custom>
+										<Form.File.Input accept=".jpg,.jpeg,.png" name="projectImg" onChange={fileChange} />
+										<Form.File.Label data-browse="Upload Image">
+											{project.projectImg ? 'Image Added' : 'Add an Image'}
+										</Form.File.Label>
+									</Form.File>
 								</div>
 							</div>
 						</Form.Group>

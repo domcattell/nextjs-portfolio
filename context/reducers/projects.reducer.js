@@ -10,7 +10,8 @@ import {
 	CLEAR_MSG,
 	GET_PROJECTS_FAILED,
 	GET_PROJECT_FAILED,
-	CLEAR_PROJECT
+	CLEAR_PROJECT,
+	PROJECT_LOADING
 } from '../actions/types';
 
 const reducer = (state, action) => {
@@ -24,7 +25,14 @@ const reducer = (state, action) => {
 		case GET_PROJECT:
 			return {
 				...state,
-				project: action.payload
+				project: action.payload,
+				loading: false
+			};
+
+		case PROJECT_LOADING: 
+			return {
+				...state,
+				loading: true
 			};
 
 		case ADD_PROJECT:
@@ -54,7 +62,8 @@ const reducer = (state, action) => {
 		case CLEAR_PROJECT:
 			return {
 				...state,
-				project: {}
+				project: {},
+				loading: true
 			};
 		
 		case GET_PROJECT_FAILED:

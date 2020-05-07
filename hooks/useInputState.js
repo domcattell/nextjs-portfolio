@@ -26,11 +26,15 @@ const useInputState = (init) => {
 		}));
 	};
 
-	const reset = () => {
+	const reset = (init) => {
 		setValue(init);
 	};
 
-	return [ newValue, handleChange, handleQuillChange, reset, handleFileChange ];
+	const currentData = (init) => {
+		setValue(init);
+	};
+
+	return [ newValue, handleChange, handleQuillChange, reset, handleFileChange, currentData ];
 };
 
 export default useInputState;

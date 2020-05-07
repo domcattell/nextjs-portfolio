@@ -11,7 +11,8 @@ import {
 	CLEAR_MSG,
 	GET_PROJECTS_FAILED,
 	GET_PROJECT_FAILED,
-	CLEAR_PROJECT
+	CLEAR_PROJECT,
+	PROJECT_LOADING
 } from '../actions/types';
 import projectsReducer from '../reducers/projects.reducer';
 import axios from 'axios';
@@ -23,7 +24,8 @@ export const ProjectsProvider = (props) => {
 	const initState = {
 		projects: [],
 		project: {},
-		projectsMsg: ''
+		projectsMsg: '',
+		loading: true
 	};
 
 	const [ state, dispatch ] = useReducer(projectsReducer, initState);
@@ -75,9 +77,9 @@ export const ProjectsProvider = (props) => {
 		}
 	};
 
-	const editProject = async (project) => {
+	const editProject = async (projectURL, project) => {
 		try {
-			const res = await axios.post(`/api/project/${projectURL}`, project);
+			const res = await axios.put(`/api/projects/${projectURL}`, project);
 			dispatch({
 				type: EDIT_PROJECT,
 				payload: res.data,
@@ -98,6 +100,8 @@ export const ProjectsProvider = (props) => {
 		dispatch({type: CLEAR_PROJECT})
 	}
 
+	const loadingProject = () => dispatch({type: PROJECT_LOADING});
+
 	const actions = {
 		getProjects,
 		getProject,
@@ -105,6 +109,7 @@ export const ProjectsProvider = (props) => {
 		editProject,
 		clearProjectMsg,
 		clearProject,
+		loadingProject
 	};
 
 	return (

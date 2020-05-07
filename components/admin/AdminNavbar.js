@@ -15,9 +15,9 @@ const AdminNavbar = () => {
 
 	return (
 		<nav className={styles.navbar}>
-			<div className={styles.navbar__header}>
+			{/* <div className={styles.navbar__header}>
 				<h4 className={styles.navbar__header__title}>Dashboard</h4>
-			</div>
+			</div> */}
 			<div className={styles.navbar__controls}>
 				<DashboardButton style="large">
 					<FontAwesomeIcon icon="home" />

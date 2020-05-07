@@ -8,8 +8,11 @@
 	position: relative;
 	color: $clr-text-light;
 	font-family: 'Roboto', sans-serif;
-	border-radius: 3px;
+	// border-radius: 5px;
 	border: 1px solid $clr-border;
+	// border-left: 1px solid $clr-border;
+	// box-shadow: 10px 10px 0px 3px rgba(0,0,0,0.75);
+
 
 
 	&__bg {
@@ -32,7 +35,7 @@
 		width: 100%;
 		position: absolute;
 		bottom: 0;
-		padding: 5px 20px;
+		padding: 5px 10px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;

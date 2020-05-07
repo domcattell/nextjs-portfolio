@@ -97,7 +97,7 @@ module.exports =
 /*!**********************************!*\
   !*** ./context/actions/types.js ***!
   \**********************************/
-/*! exports provided: GET_PROJECTS, GET_PROJECT, ADD_PROJECT, ADD_FAILED, DELETE_PROJECT, DELETE_FAILED, EDIT_PROJECT, EDIT_FAILED, CLEAR_MSG, GET_PROJECT_FAILED, GET_PROJECTS_FAILED, CLEAR_PROJECT, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
+/*! exports provided: GET_PROJECTS, GET_PROJECT, ADD_PROJECT, ADD_FAILED, DELETE_PROJECT, DELETE_FAILED, EDIT_PROJECT, EDIT_FAILED, CLEAR_MSG, GET_PROJECT_FAILED, GET_PROJECTS_FAILED, CLEAR_PROJECT, PROJECT_LOADING, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_ERROR, AUTH_SUCCESS, CLEAR_MSGS, LOGOUT */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -114,6 +114,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECT_FAILED", function() { return GET_PROJECT_FAILED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GET_PROJECTS_FAILED", function() { return GET_PROJECTS_FAILED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLEAR_PROJECT", function() { return CLEAR_PROJECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PROJECT_LOADING", function() { return PROJECT_LOADING; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AUTH_ERROR", function() { return AUTH_ERROR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_SUCCESS", function() { return LOGIN_SUCCESS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOGIN_ERROR", function() { return LOGIN_ERROR; });
@@ -132,7 +133,8 @@ const EDIT_FAILED = "EDIT_FAILED";
 const CLEAR_MSG = "CLEAR_MSG";
 const GET_PROJECT_FAILED = "GET_PROJECT_FAILED";
 const GET_PROJECTS_FAILED = "GET_PROJECTS_FAILED";
-const CLEAR_PROJECT = "CLEAR_PROJECT"; //auth
+const CLEAR_PROJECT = "CLEAR_PROJECT";
+const PROJECT_LOADING = "PROJECT_LOADING"; //auth
 
 const AUTH_ERROR = "AUTH_ERROR";
 const LOGIN_SUCCESS = "LOGIN_SUCCESS";
@@ -280,7 +282,8 @@ const ProjectsProvider = props => {
   const initState = {
     projects: [],
     project: {},
-    projectsMsg: ''
+    projectsMsg: '',
+    loading: true
   };
   const {
     0: state,
@@ -336,9 +339,9 @@ const ProjectsProvider = props => {
     }
   };
 
-  const editProject = async project => {
+  const editProject = async (projectURL, project) => {
     try {
-      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.post(`/api/project/${projectURL}`, project);
+      const res = await axios__WEBPACK_IMPORTED_MODULE_3___default.a.put(`/api/projects/${projectURL}`, project);
       dispatch({
         type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["EDIT_PROJECT"],
         payload: res.data
@@ -365,13 +368,18 @@ const ProjectsProvider = props => {
     });
   };
 
+  const loadingProject = () => dispatch({
+    type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["PROJECT_LOADING"]
+  });
+
   const actions = {
     getProjects,
     getProject,
     addProject,
     editProject,
     clearProjectMsg,
-    clearProject
+    clearProject,
+    loadingProject
   };
   return __jsx(ProjectsContext.Provider, {
     value: state
@@ -474,7 +482,13 @@ const reducer = (state, action) => {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECT"]:
       return _objectSpread({}, state, {
-        project: action.payload
+        project: action.payload,
+        loading: false
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["PROJECT_LOADING"]:
+      return _objectSpread({}, state, {
+        loading: true
       });
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["ADD_PROJECT"]:
@@ -499,7 +513,8 @@ const reducer = (state, action) => {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_PROJECT"]:
       return _objectSpread({}, state, {
-        project: {}
+        project: {},
+        loading: true
       });
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GET_PROJECT_FAILED"]:

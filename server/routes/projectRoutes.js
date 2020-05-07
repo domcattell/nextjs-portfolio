@@ -96,6 +96,21 @@ router.put('/:projectURL', checkAuth, async (req, res) => {
 	const url = `${req.protocol}://${req.get('host')}`;
 
 	try {
+		const { validateFile, fileName, uploadFile } = imageUpload(req.files.projectImg, title);
+
+		if(req.files) {
+			validateFile();
+			uploadFile();
+		}
+
+		const img = () => {
+			if(req.files) {
+				return `${url}/public/images/${fileName}`
+			} else {
+				return 0;
+			}
+		}
+
 		const updateProject = {
 			title: title,
 			titleSearch: title,
@@ -103,7 +118,7 @@ router.put('/:projectURL', checkAuth, async (req, res) => {
 			description: description,
 			code: code,
 			demo: demo,
-			projectImg: `${url}/public/images/`
+			img
 		};
 
 		projects.findOneAndUpdate({ url: projectURL }, updateProject, (err, updatedProject) => {
@@ -117,7 +132,8 @@ router.put('/:projectURL', checkAuth, async (req, res) => {
 
 		// if(!addUpdatedProject) throw Error(`Project doesn't exist`);
 	} catch (err) {
-		res.status(400).json({ msg: e.message });
+		res.status(400).json({ msg: err.message });
+		console.log(err);
 	}
 });
 
