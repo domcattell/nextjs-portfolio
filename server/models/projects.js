@@ -20,7 +20,8 @@ const projectSchema = new mongoose.Schema({
 	projectImg: {
 		type: String,
 		default: 'none'
-	}
+	},
+	imageName: String
 });
 
 module.exports = mongoose.model('project', projectSchema);

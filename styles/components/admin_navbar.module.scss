@@ -1,12 +1,12 @@
 @import '../global.scss';
 
 .navbar {
-	// backdrop-filter: blur(7px);
 	background-color: $gun-powder;
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
 	flex-direction: row-reverse;
+	border-bottom: 7px solid darken($gun-powder, 5%);
 	padding: 20px 25px 120px 25px;
 	position: fixed;
 	top: 0;

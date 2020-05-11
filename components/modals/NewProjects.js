@@ -74,7 +74,11 @@ const NewProjects = (props) => {
 								</div>
 								<div>
 									<Form.File id="formcheck-api-custom" custom>
-										<Form.File.Input accept=".jpg,.jpeg,.png" name="projectImg" onChange={fileChange} />
+										<Form.File.Input
+											accept=".jpg,.jpeg,.png"
+											name="projectImg"
+											onChange={fileChange}
+										/>
 										<Form.File.Label data-browse="Upload Image">
 											{project.projectImg ? 'Image Added' : 'Add an Image'}
 										</Form.File.Label>

@@ -547,8 +547,10 @@ const EditProject = props => {
   const handleSubmit = e => {
     e.preventDefault();
     const form_data = new FormData(EditProjectForm);
-    form_data.set('description', project.description);
-    editProject(props.url, projectDetails);
+    form_data.set('description', projectDetails.description);
+    form_data.set('imageName', projectDetails.imageName);
+    editProject(props.url, form_data);
+    console.log(form_data);
   };
 
   return __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"], {
@@ -603,7 +605,7 @@ const EditProject = props => {
     onChange: fileChange
   }), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].File.Label, {
     "data-browse": "Upload Image"
-  }, project.projectImg ? 'Image Added' : 'Add an Image')))))))));
+  }, projectDetails.projectImg !== project.projectImg ? 'Replaced Image' : 'Replace Image')))))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (EditProject);

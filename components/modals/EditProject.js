@@ -39,9 +39,12 @@ const EditProject = (props) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const form_data = new FormData(EditProjectForm);
-		form_data.set('description', project.description);
-		editProject(props.url, projectDetails)
+		form_data.set('description', projectDetails.description);
+		form_data.set('imageName', projectDetails.imageName);
+		editProject(props.url, form_data)
+		console.log(form_data);
 	};
+
 
 	return (
 		<Modal size="lg" show={props.show} onHide={props.toggle} centered style={{ zIndex: '9999' }}>
@@ -102,7 +105,7 @@ const EditProject = (props) => {
 											onChange={fileChange}
 										/>
 										<Form.File.Label data-browse="Upload Image">
-											{project.projectImg ? 'Image Added' : 'Add an Image'}
+											{projectDetails.projectImg !== project.projectImg ? 'Replaced Image' : 'Replace Image'}
 										</Form.File.Label>
 									</Form.File>
 								</div>
