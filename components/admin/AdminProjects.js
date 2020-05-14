@@ -19,10 +19,9 @@ const AdminProjects = () => {
 			<div className={styles.projects__container} id={styles.scrollbar}>
 				<div className={styles.projects__header}>
 					<h5 className={styles.projects__title}>Projects</h5>
-					<DashboardButton style="alternative">+ New Project</DashboardButton>
 				</div>
 				{projects.map((project) => (
-					<AdminProject key={project._id} title={project.title} img={project.projectImg} url={project.url}/>
+					<AdminProject key={project._id} title={project.title} img={project.projectImg} url={project.url} description={project.description}/>
 				))}
 			</div>
 		</div>

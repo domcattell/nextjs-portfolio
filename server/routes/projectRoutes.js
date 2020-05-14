@@ -49,11 +49,9 @@ router.post('/new', checkAuth, async (req, res) => {
 	const url = `${req.protocol}://${req.get('host')}`;
 
 	try {
-		//check if req.files exists
-		if (!req.files) throw Error('Please select an image');
+		console.log(req.body);
 
-		//check if body inputs filled in, if not, throw error
-		if (!title || !description || !code || !demo) throw Error('Please enter all of the fields');
+		if (!title || !description || !code || !demo || !req.files) throw Error('Please enter all of the fields');
 
 		//check if project already exists, if title name already present, throw an error
 		const projectExists = await projects.findOne({ titleSearch: title });
@@ -102,7 +100,9 @@ router.put('/:projectURL', checkAuth, async (req, res) => {
 		//quick way to do validation check
 		if (!title || !description || !code || !demo) throw Error('Please enter all of the fields');
 
-		const currentProject = await projects.findOne({ url: projectURL }, '-created');
+		// const currentProject = await projects.findOne({ url: projectURL }, '-created');
+		const currentProject = await projects.findOne({ titleSearch: title });
+		if (currentProject && projectURL != currentProject.url) throw Error('Project name already taken');
 
 		//cheap way to compare if body and found project are the same. Works for now and self explanatory
 		if (
@@ -147,16 +147,13 @@ router.put('/:projectURL', checkAuth, async (req, res) => {
 		//update db and send updated document/object as json to use in front end
 		await projects.findOneAndUpdate({ url: projectURL }, updatedProject, { new: true }, (err, project) => {
 			if (err) {
-				console.log(err);
 				throw Error('Error updating the project');
 			} else {
-				console.log(project);
 				res.status(200).json(project);
 			}
 		});
 	} catch (err) {
 		res.status(400).json({ msg: err.message });
-		console.log(err);
 	}
 });
 

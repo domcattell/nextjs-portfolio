@@ -7,26 +7,32 @@ import EditProject from '../modals/EditProject';
 import DeleteProject from '../modals/DeleteProject';
 
 const AdminProject = (props) => {
-	const [editModal, toggleEditModal] = useToggle(false);
-	const [deleteModal, toggleDeleteModal] = useToggle(false);
+	const [ editModal, toggleEditModal ] = useToggle(false);
+	const [ deleteModal, toggleDeleteModal ] = useToggle(false);
 
 	return (
 		<div className={styles.project}>
-			<img className={styles.project__bg} src={props.img} alt="project image" />
+			{editModal && <EditProject show={editModal} toggle={toggleEditModal} url={props.url} title={props.title} />}
+			{deleteModal && (<DeleteProject show={deleteModal} toggle={toggleDeleteModal} url={props.url} title={props.title} />)}
+			<div className={styles.project__bg}>
+				<img src={props.img} alt="project image" />
+			</div>
 			<div className={styles.project__toolbar}>
-				<DashboardButton>
-					<FontAwesomeIcon icon="link" />
-					<h5 className={styles.project__header}>{props.title}</h5>
-				</DashboardButton>
-				<div className={styles.project__toolbar__controls}>
+				<div className={styles.project__header}>
+					<a href="#" className={styles.project__title}>
+						{props.title}
+					</a>
+				</div>
+				<section className={styles.project__info}>
+					<p className={styles.project__desc}>{props.description}</p>
+				</section>
+				<div className={styles.project__controls}>
 					<DashboardButton onClick={toggleEditModal}>
 						<FontAwesomeIcon icon="pen-square" />
 					</DashboardButton>
 					<DashboardButton onClick={toggleDeleteModal}>
 						<FontAwesomeIcon icon="trash" />
 					</DashboardButton>
-					{editModal && <EditProject show={editModal} toggle={toggleEditModal} url={props.url} title={props.title}/>}
-					{deleteModal && <DeleteProject show={deleteModal} toggle={toggleDeleteModal} url={props.url} title={props.title}/>}
 				</div>
 			</div>
 		</div>

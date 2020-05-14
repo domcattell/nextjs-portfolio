@@ -6,14 +6,14 @@ import { ProjectsActions, ProjectsContext } from '../../context/contexts/project
 import styles from '../../styles/components/admin_newproject.module.scss';
 
 const NewProjects = (props) => {
-	const [ project, handleChange, handleDesc, resetForm, fileChange ] = useInputState({});
+	const [ project, handleChange, handleDesc, resetForm, fileChange ] = useInputState("");
 	const { addProject, clearProjectMsg } = useContext(ProjectsActions);
 	const { projectsMsg } = useContext(ProjectsContext);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const form_data = new FormData(newProjectForm);
-		form_data.set('description', project.description);
+		form_data.append('description', project.description);
 		addProject(form_data);
 	};
 
