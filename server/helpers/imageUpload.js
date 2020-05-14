@@ -2,49 +2,52 @@ const path = require('path');
 const fs = require('fs');
 const fileHelper = {};
 
-//file uploader helper function using express-fileupload to simplify upload process
-
-/** 
- * @func upload()
- * @param projectName is used to create a new file name on the server
- * @param file takes a req.file.name to upload.
- * returns a upload function, and the file name for saving to a db.
- * @func validateFile() uses @param file param and checks that the file meets
- * the conditional requirements. If not, it will throw an Error. 
- * checks if file exists
- * checks if file size exceeds @const maxFileSize 
- * checks if file format matches @const formats
- * @func uploadFile() runs the validateFile func then uses express-fileupload 
- * and uploads the file to the path created by @const filePath using the @func file.mv()
- */
-
 /**
- * @func rename()
- * @param newName is used to create a new file name for renaming the file
- * @param oldName is the previous file name. takes it's extension/file format
- * to parse into the new file name.
- * returns a function to rename the file, and a new file name to use for saving to a db.
- * 
+* File upload helper function to simplify uploading, renaming and deleting a file
+* uses file-expressupload for the upload functionality
 */
 
+/**
+* @func uploadFile
+* @param projectName is used to create a new file name. set up to replace special
+* characters with "_" along with ammending "_image" to end of the file name
+* @param file takes a file request (req.files.FILE_NAME) to upload
+* @func validateFile is used to validate and check it is ok to be uploaded
+* @const maxFileSize sets the max file size that can be upload
+* @const formats is an array of formats that can be accepted. the function
+* will then loop through each value (format), and if the current format
+* doesn't match, it will throw an error 
+*/
+
+/**
+* @func renameFile
+* @param newName is used to create a new name. replaces special characters with "_"
+* @param oldName is the current file name. then uses fs.renameSync, and replaces old file name
+* with thew new one.
+*/
+
+/**
+* @func deleteFile
+* @param fileName simply takes a file name, uses the global @const FILE_DIR, concatenates 
+* them together, and uses fs.unlinkSync to delete the file.
+*/
+
+//global vars
 const FILE_DIR = './public/images/';
 
-fileHelper.upload = (projectName, file) => {
-	//create a new file name and path
+fileHelper.uploadFile = (projectName, file) => {
 	const formatFileName = projectName.replace(/[&\/\\#,+()$~%.'":*?<>/ /{}]/g, '_').toLowerCase();
 	const fileExt = path.extname(file.name);
 	const newFileName = `${formatFileName}_image${fileExt}`;
 	const filePath = `${FILE_DIR}${newFileName}`;
 
-	validateFile = () => {
+	const validateFile = () => {
 		const currentFormat = file.mimetype;
 		const size = file.size;
 		const maxFileSize = 3000000;
 		const formats = [ 'image/png', 'image/jpeg', 'image/jpg' ];
 
-		if (!file) {
-			throw Error('Please select an image');
-		} else if (formats.every((format) => format != currentFormat)) {
+		if (formats.every((format) => format != currentFormat)) {
 			throw Error('Please choose the corrent format.');
 		} else if (size > maxFileSize) {
 			throw Error('Image size too large. ');
@@ -52,8 +55,6 @@ fileHelper.upload = (projectName, file) => {
 	};
 
 	const uploadFile = () => {
-		validateFile();
-
 		file.mv(filePath, (err) => {
 			if (err) {
 				console.log(err);
@@ -62,13 +63,15 @@ fileHelper.upload = (projectName, file) => {
 		});
 	};
 
+	validateFile();
+	uploadFile();
+
 	return {
-		fileName: newFileName,
-		uploadFile: uploadFile
+		fileName: newFileName
 	};
 };
 
-fileHelper.rename = (newName, oldName) => {
+fileHelper.renameFile = (newName, oldName) => {
 	const fileExt = path.extname(oldName);
 	const formatFileName = newName.replace(/[&\/\\#,+()$~%.'":*?<>/ /{}]/g, '_').toLowerCase();
 	const newFileName = `${formatFileName}_image${fileExt}`;
@@ -76,15 +79,28 @@ fileHelper.rename = (newName, oldName) => {
 	let newFilePath = `${FILE_DIR}${newFileName}`;
 
 	const renameFile = () => {
-		fs.rename(oldFilePath, newFilePath, (err) => {
-			if (err) throw Error('Error with the image name');
-		});
+		if (fs.existsSync(oldFilePath)) {
+			fs.renameSync(oldFilePath, newFilePath);
+		} else {
+			throw Error('Error renaming image name');
+		}
 	};
 
+	renameFile();
+
 	return {
-		newFileName: newFileName,
-		renameFile: renameFile
+		newFileName: newFileName
 	};
+};
+
+fileHelper.deleteFile = (fileName) => {
+	const path = `${FILE_DIR}${fileName}`;
+
+	if (fs.existsSync(path)) {
+		fs.unlinkSync(path);
+	} else {
+		throw Error('Error finding image to delete');
+	}
 };
 
 module.exports = fileHelper;

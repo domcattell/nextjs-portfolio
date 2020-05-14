@@ -17,37 +17,30 @@ const EditProject = (props) => {
 	 * when the @project state changes, and fills in the form with data
 	 */
 
-	useEffect(
-		() => {
-			loadingProject();
-			getProject(props.url);
-			return () => {
-				clearProject();
-				clearProjectMsg();
-			};
-		},
-		[ props.url ]
-	);
+	useEffect(() => {
+		loadingProject();
+		getProject(props.url);
+		return () => {
+			clearProject();
+			clearProjectMsg();
+		};
+	},[ props.url ]);
 
-	useEffect(
-		() => {
-			currentData(project);
-		},
-		[ project ]
-	);
+	useEffect(() => {
+		currentData(project);
+	},[ project ]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const form_data = new FormData(EditProjectForm);
 		form_data.set('description', projectDetails.description);
 		form_data.set('imageName', projectDetails.imageName);
-		editProject(props.url, form_data)
+		editProject(props.url, form_data);
 		console.log(form_data);
 	};
 
-
 	return (
-		<Modal size="lg" show={props.show} onHide={props.toggle} centered style={{ zIndex: '9999' }}>
+		<Modal size="lg" show={props.show} onHide={props.toggle} centered>
 			<Modal.Header closeButton>
 				<Modal.Title id="new-project">Edit {props.title}</Modal.Title>
 			</Modal.Header>
@@ -94,7 +87,7 @@ const EditProject = (props) => {
 							<div className={styles.newproject__submit}>
 								<div>
 									<Button variant="primary" type="submit">
-										Update Project
+										Save Changes
 									</Button>
 								</div>
 								<div>
@@ -105,7 +98,11 @@ const EditProject = (props) => {
 											onChange={fileChange}
 										/>
 										<Form.File.Label data-browse="Upload Image">
-											{projectDetails.projectImg !== project.projectImg ? 'Replaced Image' : 'Replace Image'}
+											{projectDetails.projectImg !== project.projectImg ? (
+												'Replaced Image'
+											) : (
+												'Replace Image'
+											)}
 										</Form.File.Label>
 									</Form.File>
 								</div>

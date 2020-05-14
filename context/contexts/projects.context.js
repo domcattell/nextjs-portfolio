@@ -43,7 +43,7 @@ export const ProjectsProvider = (props) => {
 			dispatch({
 				type: GET_PROJECTS_FAILED,
 				payload: e.response.data
-			})
+			});
 		}
 	};
 
@@ -58,9 +58,9 @@ export const ProjectsProvider = (props) => {
 			dispatch({
 				type: GET_PROJECT_FAILED,
 				payload: e.response.data
-			})
+			});
 		}
-	}
+	};
 
 	const addProject = async (project) => {
 		try {
@@ -82,14 +82,29 @@ export const ProjectsProvider = (props) => {
 			const res = await axios.put(`/api/projects/${projectURL}`, project);
 			dispatch({
 				type: EDIT_PROJECT,
-				payload: res.data,
+				payload: res.data
 			});
 		} catch (err) {
 			dispatch({
 				type: EDIT_FAILED,
 				payload: err.response.data
 			});
-		};
+		}
+	};
+
+	const deleteProject = async (projectURL) => {
+		try {
+			await axios.delete(`/api/projects/${projectURL}`);
+			dispatch({
+				type: DELETE_PROJECT,
+				payload: projectURL
+			});
+		} catch (err) {
+			dispatch({
+				type: DELETE_FAILED,
+				payload: err.response.data
+			});
+		}
 	};
 
 	const clearProjectMsg = () => {
@@ -97,16 +112,17 @@ export const ProjectsProvider = (props) => {
 	};
 
 	const clearProject = () => {
-		dispatch({type: CLEAR_PROJECT})
-	}
+		dispatch({ type: CLEAR_PROJECT });
+	};
 
-	const loadingProject = () => dispatch({type: PROJECT_LOADING});
+	const loadingProject = () => dispatch({ type: PROJECT_LOADING });
 
 	const actions = {
 		getProjects,
 		getProject,
 		addProject,
 		editProject,
+		deleteProject,
 		clearProjectMsg,
 		clearProject,
 		loadingProject

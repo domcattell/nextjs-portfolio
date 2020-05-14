@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Form, Modal, Button, Container, Alert } from 'react-bootstrap';
 import TextEditor from '../admin/TextEditor';
 import useInputState from '../../hooks/useInputState';
@@ -17,13 +17,14 @@ const NewProjects = (props) => {
 		addProject(form_data);
 	};
 
-	const close = () => {
-		props.toggle();
-		clearProjectMsg();
-	};
+	useEffect(() => {
+		return () => {
+			clearProjectMsg();
+		};
+	},[]);
 
 	return (
-		<Modal size="lg" show={props.show} onHide={close} centered style={{ zIndex: '9999' }}>
+		<Modal size="lg" show={props.show} onHide={props.toggle} centered style={{ zIndex: '9999' }}>
 			<Modal.Header closeButton>
 				<Modal.Title id="new-project">New Portfolio Project</Modal.Title>
 			</Modal.Header>

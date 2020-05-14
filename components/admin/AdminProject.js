@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DashboardButton from '../layout/DashboardButton';
 import useToggle from '../../hooks/useToggle';
 import EditProject from '../modals/EditProject';
+import DeleteProject from '../modals/DeleteProject';
 
 const AdminProject = (props) => {
-	const [editProject, toggleEditProject] = useToggle(false);
+	const [editModal, toggleEditModal] = useToggle(false);
+	const [deleteModal, toggleDeleteModal] = useToggle(false);
 
 	return (
 		<div className={styles.project}>
@@ -17,13 +19,14 @@ const AdminProject = (props) => {
 					<h5 className={styles.project__header}>{props.title}</h5>
 				</DashboardButton>
 				<div className={styles.project__toolbar__controls}>
-					<DashboardButton onClick={toggleEditProject}>
+					<DashboardButton onClick={toggleEditModal}>
 						<FontAwesomeIcon icon="pen-square" />
 					</DashboardButton>
-					<DashboardButton>
+					<DashboardButton onClick={toggleDeleteModal}>
 						<FontAwesomeIcon icon="trash" />
 					</DashboardButton>
-					{editProject && <EditProject show={editProject} toggle={toggleEditProject} url={props.url} title={props.title}/>}
+					{editModal && <EditProject show={editModal} toggle={toggleEditModal} url={props.url} title={props.title}/>}
+					{deleteModal && <DeleteProject show={deleteModal} toggle={toggleDeleteModal} url={props.url} title={props.title}/>}
 				</div>
 			</div>
 		</div>

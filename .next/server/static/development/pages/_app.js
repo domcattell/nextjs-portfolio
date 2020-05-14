@@ -352,8 +352,21 @@ const ProjectsProvider = props => {
         payload: err.response.data
       });
     }
+  };
 
-    ;
+  const deleteProject = async projectURL => {
+    try {
+      await axios__WEBPACK_IMPORTED_MODULE_3___default.a.delete(`/api/projects/${projectURL}`);
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["DELETE_PROJECT"],
+        payload: projectURL
+      });
+    } catch (err) {
+      dispatch({
+        type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["DELETE_FAILED"],
+        payload: err.response.data
+      });
+    }
   };
 
   const clearProjectMsg = () => {
@@ -377,6 +390,7 @@ const ProjectsProvider = props => {
     getProject,
     addProject,
     editProject,
+    deleteProject,
     clearProjectMsg,
     clearProject,
     loadingProject
@@ -498,12 +512,12 @@ const reducer = (state, action) => {
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["DELETE_PROJECT"]:
       return _objectSpread({}, state, {
-        projects: state.projects.filter(project => project.id != action.payload)
+        projects: state.projects.filter(project => project.url !== action.payload)
       });
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["EDIT_PROJECT"]:
       return _objectSpread({}, state, {
-        projects: state.projects.map(project => project.id == action.payload.id ? action.payload : project)
+        projects: state.projects.map(project => project._id === action.payload._id ? action.payload : project)
       });
 
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["CLEAR_MSG"]:

@@ -2,7 +2,7 @@ const express = require('express'),
 	router = express.Router({ mergeParams: true }),
 	projects = require('../models/projects'),
 	checkAuth = require('../middleware/checkAuth'),
-	fileHelper = require('../helpers/imageUpload');
+	{ uploadFile, renameFile, deleteFile } = (fileHelper = require('../helpers/imageUpload'));
 
 /**
  * @route /api/projects/
@@ -59,10 +59,9 @@ router.post('/new', checkAuth, async (req, res) => {
 		const projectExists = await projects.findOne({ titleSearch: title });
 		if (projectExists) throw Error('Project with this name already exists');
 
-		//destructure imageUpload helper function to keep code cleaner
-		//uploadFile will validate the image and upload.
-		const { fileName, uploadFile } = fileHelper.upload(title, req.files.projectImg);
-		uploadFile();
+		//uses the upload helper function to upload file and desctructures
+		//fileName from return to use in object for saving to db
+		const { fileName } = uploadFile(title, req.files.projectImg);
 
 		//use body to create new project
 		const newProject = new projects({
@@ -95,60 +94,66 @@ router.post('/new', checkAuth, async (req, res) => {
  */
 router.put('/:projectURL', checkAuth, async (req, res) => {
 	const { projectURL } = req.params;
-	const { title, description, code, demo, projectImg, imageName } = req.body;
+	const { title, description, code, demo, imageName } = req.body;
 	const url = `${req.protocol}://${req.get('host')}`;
+	const imagePath = '/public/images/';
 
 	try {
-		//check if body inputs filled in, if not, throw error
+		//quick way to do validation check
 		if (!title || !description || !code || !demo) throw Error('Please enter all of the fields');
-		
-		const projectExists = await projects.findOne({ titleSearch: title });
-		if (projectExists) throw Error('Project with this name already exists');
-		
-		//image function checks if file is present in req.files
-		//if present, runs the imageHelper upload function to replace
-		//image. if no req.files exists, then runs the
-		//imageHelper rename function to rename the file, based
-		//on what the user posts back to the db.
-		const image = () => {
-			if (req.files) {
-				const { fileName, uploadFile } = fileHelper.upload(title, req.files.projectImg);
-				uploadFile();
-				return {
-					projectImg: `${url}/public/images/${fileName}`,
-					imageName: fileName
-				};
-			} else {
-				const { newFileName, renameFile } = fileHelper.rename(title, imageName);
-				renameFile();
-				return {
-					projectImg: `${url}/public/images/${newFileName}`,
-					imageName: newFileName
-				};
-			}
-		};
 
-		const updateProject = {
+		const currentProject = await projects.findOne({ url: projectURL }, '-created');
+
+		//cheap way to compare if body and found project are the same. Works for now and self explanatory
+		if (
+			title === currentProject.title &&
+			description === currentProject.description &&
+			code === currentProject.code &&
+			demo === currentProject.demo &&
+			!req.files
+		) {
+			throw Error('No changes were made');
+		}
+
+		//variables for renaming db fields
+		let newProjectImg = '';
+		let newImageName = '';
+
+		//if req.files exists, then change existing image with new one using uploadFile()
+		//else use renameFile() to rename the file based on the title from the body
+		//set newProjectImg and newImageName based on user choice
+		if (req.files) {
+			const { fileName } = uploadFile(title, req.files.projectImg);
+			newProjectImg = `${url}${imagePath}${fileName}`;
+			newImageName = fileName;
+		} else {
+			const { newFileName } = renameFile(title, imageName);
+			newProjectImg = `${url}${imagePath}${newFileName}`;
+			newImageName = newFileName;
+		}
+
+		//object for updating db. uses newProjectImg and newImageName for "projectImg" & "imageName" fields
+		const updatedProject = {
 			title,
 			code,
 			demo,
 			description,
 			titleSearch: title,
 			url: title.replace(/[&\/\\#,+()$~%.'":*?<>/ /{}]/g, '_'),
-			projectImg: image().projectImg,
-			imageName: image().imageName
+			projectImg: newProjectImg,
+			imageName: newImageName
 		};
 
-		projects.findOneAndUpdate({ url: projectURL }, updateProject, (err, updatedProject) => {
+		//update db and send updated document/object as json to use in front end
+		await projects.findOneAndUpdate({ url: projectURL }, updatedProject, { new: true }, (err, project) => {
 			if (err) {
 				console.log(err);
 				throw Error('Error updating the project');
 			} else {
-				res.status(200).json(updatedProject);
+				console.log(project);
+				res.status(200).json(project);
 			}
 		});
-
-		// if(!addUpdatedProject) throw Error(`Project doesn't exist`);
 	} catch (err) {
 		res.status(400).json({ msg: err.message });
 		console.log(err);
@@ -160,16 +165,26 @@ router.put('/:projectURL', checkAuth, async (req, res) => {
  * @description delete a project
  * @access Private 
  */
-router.delete('/:id', checkAuth, (req, res) => {
-	const { id } = req.params;
+router.delete('/:projectURL', checkAuth, async (req, res) => {
+	const { projectURL } = req.params;
 
-	projects.findByIdAndRemove(id, (err) => {
-		if (err) {
-			res.status(403).json({ msg: 'Error removing project' });
-		} else {
-			res.status(200);
-		}
-	});
+	try {
+		//check if project exists
+		const project = await projects.findOne({ url: projectURL });
+		if (!project) throw Error('Error deleting the project');
+
+		//remove project from db
+		const removeProject = project.remove();
+		if (!removeProject) throw Error('Error trying to remove project');
+
+		//deleteFile() from fileHelper to find image and delete it
+		deleteFile(project.imageName);
+
+		res.status(200).json({ msg: 'Deleted project' });
+	} catch (err) {
+		res.status(400).json({ msg: err.message });
+		console.log(err);
+	}
 });
 
 module.exports = router;
