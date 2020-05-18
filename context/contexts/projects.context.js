@@ -16,6 +16,8 @@ import {
 } from '../actions/types';
 import projectsReducer from '../reducers/projects.reducer';
 import axios from 'axios';
+//currently uses react-toastify to show error data from server response as notifcation
+import { toast } from 'react-toastify';
 
 export const ProjectsContext = createContext();
 export const ProjectsActions = createContext();
@@ -69,10 +71,11 @@ export const ProjectsProvider = (props) => {
 				type: ADD_PROJECT,
 				payload: res.data
 			});
-		} catch (e) {
+		} catch (err) {
+			toast.error(err.response.data.msg)
 			dispatch({
 				type: ADD_FAILED,
-				payload: e.response.data
+				payload: err.response.data
 			});
 		}
 	};
@@ -85,9 +88,10 @@ export const ProjectsProvider = (props) => {
 				payload: res.data
 			});
 		} catch (err) {
+			toast.error(err.response.data.msg)
 			dispatch({
 				type: EDIT_FAILED,
-				payload: err.response.data
+				payload: err.response.data,
 			});
 		}
 	};
@@ -100,6 +104,7 @@ export const ProjectsProvider = (props) => {
 				payload: projectURL
 			});
 		} catch (err) {
+			toast.error(err.response.data.msg)
 			dispatch({
 				type: DELETE_FAILED,
 				payload: err.response.data

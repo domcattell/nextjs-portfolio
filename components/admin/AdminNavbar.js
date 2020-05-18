@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, memo } from 'react';
 import styles from '../../styles/components/admin_navbar.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NewProject from '../modals/NewProjects';
@@ -37,4 +37,4 @@ const AdminNavbar = () => {
 	);
 };
 
-export default AdminNavbar;
+export default memo(AdminNavbar);

@@ -11,8 +11,9 @@ import {
 	GET_PROJECTS_FAILED,
 	GET_PROJECT_FAILED,
 	CLEAR_PROJECT,
-	PROJECT_LOADING
+	PROJECT_LOADING,
 } from '../actions/types';
+import { toast } from 'react-toastify';
 
 const reducer = (state, action) => {
 	switch (action.type) {

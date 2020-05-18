@@ -49,8 +49,6 @@ router.post('/new', checkAuth, async (req, res) => {
 	const url = `${req.protocol}://${req.get('host')}`;
 
 	try {
-		console.log(req.body);
-
 		if (!title || !description || !code || !demo || !req.files) throw Error('Please enter all of the fields');
 
 		//check if project already exists, if title name already present, throw an error
@@ -81,7 +79,6 @@ router.post('/new', checkAuth, async (req, res) => {
 		res.status(200).json(createProject);
 	} catch (e) {
 		res.status(400).json({ msg: e.message });
-		console.log(e.message);
 	}
 });
 
@@ -102,10 +99,15 @@ router.put('/:projectURL', checkAuth, async (req, res) => {
 
 		// const currentProject = await projects.findOne({ url: projectURL }, '-created');
 		const currentProject = await projects.findOne({ titleSearch: title });
-		if (currentProject && projectURL != currentProject.url) throw Error('Project name already taken');
+		if (currentProject && projectURL != currentProject.url) {
+			throw Error('Project name already taken');
+		}
 
-		//cheap way to compare if body and found project are the same. Works for now and self explanatory
+		//if currentProject found, and the body and project match
+		//then do not query the database. quick and easy way to check
+
 		if (
+			currentProject &&
 			title === currentProject.title &&
 			description === currentProject.description &&
 			code === currentProject.code &&
@@ -145,7 +147,7 @@ router.put('/:projectURL', checkAuth, async (req, res) => {
 		};
 
 		//update db and send updated document/object as json to use in front end
-		await projects.findOneAndUpdate({ url: projectURL }, updatedProject, { new: true }, (err, project) => {
+		projects.findOneAndUpdate({ url: projectURL }, updatedProject, { new: true }, (err, project) => {
 			if (err) {
 				throw Error('Error updating the project');
 			} else {

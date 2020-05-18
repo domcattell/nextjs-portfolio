@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styles from '../../styles/components/admin_pages.module.scss';
@@ -38,4 +38,4 @@ const AdminPages = () => {
 	);
 };
 
-export default AdminPages;
+export default memo(AdminPages);

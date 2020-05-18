@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import styles from '../../styles/layout/dashboard_button.module.scss';
 
 const DashboardButton = (props) => {
@@ -25,4 +25,4 @@ const DashboardButton = (props) => {
 	);
 };
 
-export default DashboardButton;
+export default memo(DashboardButton);

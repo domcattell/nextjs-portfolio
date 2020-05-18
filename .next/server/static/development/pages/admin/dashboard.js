@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -196,7 +196,7 @@ const AdminNavbar = () => {
   })));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (AdminNavbar);
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(AdminNavbar));
 
 /***/ }),
 
@@ -275,7 +275,7 @@ const AdminPages = () => {
   }), "Github"))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (AdminPages);
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(AdminPages));
 
 /***/ }),
 
@@ -310,6 +310,7 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 const AdminProject = props => {
   const [editModal, toggleEditModal] = Object(_hooks_useToggle__WEBPACK_IMPORTED_MODULE_4__["default"])(false);
   const [deleteModal, toggleDeleteModal] = Object(_hooks_useToggle__WEBPACK_IMPORTED_MODULE_4__["default"])(false);
+  const description = `${props.description.substring(0, 300)}...`;
   return __jsx("div", {
     className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project
   }, editModal && __jsx(_modals_EditProject__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -323,8 +324,9 @@ const AdminProject = props => {
     url: props.url,
     title: props.title
   }), __jsx("div", {
-    className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project__bg
+    className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project__image
   }, __jsx("img", {
+    className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project__src,
     src: props.img,
     alt: "project image"
   })), __jsx("div", {
@@ -335,16 +337,19 @@ const AdminProject = props => {
     href: "#",
     className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project__title
   }, props.title)), __jsx("section", {
-    className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project__info
-  }, __jsx("p", {
-    className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project__desc
-  }, props.description)), __jsx("div", {
+    className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project__info,
+    dangerouslySetInnerHTML: {
+      __html: description
+    }
+  }), __jsx("div", {
     className: _styles_components_admin_project_module_scss__WEBPACK_IMPORTED_MODULE_1___default.a.project__controls
   }, __jsx(_layout_DashboardButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    style: "alternative",
     onClick: toggleEditModal
   }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
     icon: "pen-square"
   })), __jsx(_layout_DashboardButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    style: "alternative",
     onClick: toggleDeleteModal
   }, __jsx(_fortawesome_react_fontawesome__WEBPACK_IMPORTED_MODULE_2__["FontAwesomeIcon"], {
     icon: "trash"
@@ -496,7 +501,7 @@ const DashboardButton = props => {
   }, props.children);
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (DashboardButton);
+/* harmony default export */ __webpack_exports__["default"] = (Object(react__WEBPACK_IMPORTED_MODULE_0__["memo"])(DashboardButton));
 
 /***/ }),
 
@@ -695,14 +700,11 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const NewProjects = props => {
-  const [project, handleChange, handleDesc, resetForm, fileChange] = Object(_hooks_useInputState__WEBPACK_IMPORTED_MODULE_3__["default"])("");
+  const [project, handleChange, handleDesc, resetForm, fileChange] = Object(_hooks_useInputState__WEBPACK_IMPORTED_MODULE_3__["default"])('');
   const {
     addProject,
     clearProjectMsg
   } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_4__["ProjectsActions"]);
-  const {
-    projectsMsg
-  } = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_contexts_projects_context__WEBPACK_IMPORTED_MODULE_4__["ProjectsContext"]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -712,6 +714,7 @@ const NewProjects = props => {
   };
 
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    console.log('ruh roh');
     return () => {
       clearProjectMsg();
     };
@@ -731,9 +734,7 @@ const NewProjects = props => {
   }, "New Portfolio Project")), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"], {
     id: "newProjectForm",
     onSubmit: handleSubmit
-  }, projectsMsg && __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Alert"], {
-    variant: "warning"
-  }, projectsMsg.msg), __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Control, {
+  }, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Group, null, __jsx(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"].Control, {
     name: "title",
     value: project.title || '',
     onChange: handleChange,
@@ -953,9 +954,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reducers_projects_reducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../reducers/projects.reducer */ "./context/reducers/projects.reducer.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "axios");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-toastify */ "react-toastify");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_toastify__WEBPACK_IMPORTED_MODULE_4__);
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
+
+ //currently uses react-toastify to show error data from server response as notifcation
 
 
 const ProjectsContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])();
@@ -1013,10 +1018,11 @@ const ProjectsProvider = props => {
         type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["ADD_PROJECT"],
         payload: res.data
       });
-    } catch (e) {
+    } catch (err) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_4__["toast"].error(err.response.data.msg);
       dispatch({
         type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["ADD_FAILED"],
-        payload: e.response.data
+        payload: err.response.data
       });
     }
   };
@@ -1029,6 +1035,7 @@ const ProjectsProvider = props => {
         payload: res.data
       });
     } catch (err) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_4__["toast"].error(err.response.data.msg);
       dispatch({
         type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["EDIT_FAILED"],
         payload: err.response.data
@@ -1044,6 +1051,7 @@ const ProjectsProvider = props => {
         payload: projectURL
       });
     } catch (err) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_4__["toast"].error(err.response.data.msg);
       dispatch({
         type: _actions_types__WEBPACK_IMPORTED_MODULE_1__["DELETE_FAILED"],
         payload: err.response.data
@@ -1161,11 +1169,14 @@ const reducer = (state, action) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/types */ "./context/actions/types.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-toastify */ "react-toastify");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_toastify__WEBPACK_IMPORTED_MODULE_1__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -1453,10 +1464,13 @@ module.exports = {
 // Exports
 module.exports = {
 	"project": "admin_project_project__P8jpa",
-	"project__bg": "admin_project_project__bg__p6TCE",
-	"project__header": "admin_project_project__header__23JjW",
 	"project__toolbar": "admin_project_project__toolbar__1ij_o",
-	"project__toolbar__controls": "admin_project_project__toolbar__controls__2VcCW"
+	"project__info": "admin_project_project__info__1rSXD",
+	"project__image": "admin_project_project__image__1fhQ8",
+	"project__src": "admin_project_project__src__3eSCu",
+	"project__header": "admin_project_project__header__23JjW",
+	"project__controls": "admin_project_project__controls__1j_Ey",
+	"project__title": "admin_project_project__title__3aqrt"
 };
 
 /***/ }),
@@ -1495,7 +1509,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!****************************************!*\
   !*** multi ./pages/admin/dashboard.js ***!
   \****************************************/
@@ -1559,6 +1573,17 @@ module.exports = require("react");
 /***/ (function(module, exports) {
 
 module.exports = require("react-bootstrap");
+
+/***/ }),
+
+/***/ "react-toastify":
+/*!*********************************!*\
+  !*** external "react-toastify" ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("react-toastify");
 
 /***/ })
 

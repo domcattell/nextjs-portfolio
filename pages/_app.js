@@ -19,8 +19,16 @@ import {
 	faSmile,
 	faUserPlus
 } from '@fortawesome/free-solid-svg-icons';
-// import 'react-quill/dist/quill.snow.css';
+import { toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+toast.configure({
+	hideProgressBar: true,
+	autoClose: 3000,
+	transition: Slide,
+});
+
+// import 'react-quill/dist/quill.snow.css';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MyApp({ Component, pageProps }) {

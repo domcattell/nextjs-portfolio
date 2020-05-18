@@ -9,15 +9,14 @@
 	&:active {
 		transform: translateY(0.5px);
 		outline: none;
-		box-shadow: inset 0px 0px 0px 3px $clr-btn-hover;
+		// box-shadow: inset 0px 0px 0px 3px $clr-btn-hover;
 	}
 
 	&:focus {
 		outline: none;
-		box-shadow: inset 0px 0px 0px 3px $clr-btn-hover;
+		box-shadow: inset 0px 0px 0px 2px $clr-btn-hover;
 	}
 }
-
 
 .large {
 	font-size: 30px;
@@ -35,17 +34,17 @@
 }
 
 .alternative {
-	font-size: 16px;
+	font-size: 20px;
+	border: none;
 	cursor: pointer;
-	background-color: transparent;
-	transition: background 0.3s ease;
+	background: none;
+	border-radius: 5px;
+	margin: 0;
+	padding: 3px 20px;
+	transition: background 0.35s ease, color 0.35s ease;
 	outline: none;
-	border-radius: 25px; //
-	border: 1px solid $clr-border; //
-	color: $clr-text-dark; //
-	font-weight: 700; //
-	padding: 10px 20px; //
-	@include interactions;
+    color: $clr-text-dark;
+    @include interactions;
 }
 
 .small {

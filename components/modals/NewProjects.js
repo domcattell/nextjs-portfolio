@@ -6,9 +6,8 @@ import { ProjectsActions, ProjectsContext } from '../../context/contexts/project
 import styles from '../../styles/components/admin_newproject.module.scss';
 
 const NewProjects = (props) => {
-	const [ project, handleChange, handleDesc, resetForm, fileChange ] = useInputState("");
+	const [ project, handleChange, handleDesc, resetForm, fileChange ] = useInputState('');
 	const { addProject, clearProjectMsg } = useContext(ProjectsActions);
-	const { projectsMsg } = useContext(ProjectsContext);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -16,12 +15,13 @@ const NewProjects = (props) => {
 		form_data.append('description', project.description);
 		addProject(form_data);
 	};
-
+	
 	useEffect(() => {
+		console.log('ruh roh');
 		return () => {
 			clearProjectMsg();
 		};
-	},[]);
+	}, []);
 
 	return (
 		<Modal size="lg" show={props.show} onHide={props.toggle} centered style={{ zIndex: '9999' }}>
@@ -31,7 +31,6 @@ const NewProjects = (props) => {
 			<Modal.Body>
 				<Container>
 					<Form id="newProjectForm" onSubmit={handleSubmit}>
-						{projectsMsg && <Alert variant="warning">{projectsMsg.msg}</Alert>}
 						<Form.Group>
 							<Form.Control
 								name="title"
