@@ -1,9 +1,6 @@
 import React from 'react';
 import { ProjectsProvider } from '../context/contexts/projects.context';
 import { AuthProvider } from '../context/contexts/auth.context';
-import '../styles/reset.css';
-import '../styles/_custom_theme.scss';
-import '../styles/quill_editor_custom.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import {
@@ -20,16 +17,18 @@ import {
 	faUserPlus
 } from '@fortawesome/free-solid-svg-icons';
 import { toast, Slide } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
+import '../styles/utils/reset.css';
+import '../styles/utils/_custom_bootstrap_theme.scss';
+import '../styles/utils/_custom_toastify.css'
+import '../styles/utils/_custom_quill_editor.css';
 
 toast.configure({
 	hideProgressBar: true,
 	autoClose: 3000,
 	transition: Slide,
 });
-
-// import 'react-quill/dist/quill.snow.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MyApp({ Component, pageProps }) {
 	library.add(fab, faUserPlus, faCog, faSignOutAlt, faHome, faNewspaper, faExternalLinkAlt, faPenSquare, faTrash, faLink, faAt, faSmile);

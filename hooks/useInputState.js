@@ -30,11 +30,8 @@ const useInputState = (init) => {
 		setValue(init);
 	};
 
-	const currentData = (init) => {
-		setValue(init);
-	};
 
-	return [ newValue, handleChange, handleQuillChange, reset, handleFileChange, currentData ];
+	return [ newValue, handleChange, handleQuillChange, handleFileChange, reset ];
 };
 
 export default useInputState;

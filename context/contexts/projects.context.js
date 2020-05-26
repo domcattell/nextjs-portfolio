@@ -72,7 +72,7 @@ export const ProjectsProvider = (props) => {
 				payload: res.data
 			});
 		} catch (err) {
-			toast.error(err.response.data.msg)
+			toast(err.response.data.msg)
 			dispatch({
 				type: ADD_FAILED,
 				payload: err.response.data
@@ -88,7 +88,7 @@ export const ProjectsProvider = (props) => {
 				payload: res.data
 			});
 		} catch (err) {
-			toast.error(err.response.data.msg)
+			toast(err.response.data.msg)
 			dispatch({
 				type: EDIT_FAILED,
 				payload: err.response.data,
@@ -104,7 +104,7 @@ export const ProjectsProvider = (props) => {
 				payload: projectURL
 			});
 		} catch (err) {
-			toast.error(err.response.data.msg)
+			toast(err.response.data.msg)
 			dispatch({
 				type: DELETE_FAILED,
 				payload: err.response.data
